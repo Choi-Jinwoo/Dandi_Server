@@ -7,7 +7,7 @@ module.exports = async function(event_id) {
         })
 
         if (findChannel === null || findChannel === undefined) {
-            throw "삭제할 일정이 존재하지 않습니다"
+            throw "일정이 존재하지 않습니다"
         }
         
         return findChannel.channel_id;
