@@ -24,6 +24,6 @@ app.use((req, res, next) => {
 */
 models.sequelizeInit();
 
-app.listen(3000, () => {
-    console.log("Server is running at port 3000");
+app.listen(5000, () => {
+    console.log("Server is running at port 5000");
 })
