@@ -13,7 +13,6 @@ module.exports = function (req, res) {
     .then((data) => {
         if (data === null || data === undefined) {
             console.log("일치하는 회원 정보가 없습니다 req ID : " + req_id)
-            console.log("일치하는 회원 정보가 없습니다 req PW : " + req_pw)
             return res.status(401).json({ status : 401, message : "일치하는 회원 정보가 없습니다"});
         }
 

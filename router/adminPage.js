@@ -6,7 +6,7 @@ const tokenMiddleware = require('../middleware/auth'); //middleware
 const router = express.Router();
 
 router.get("/notallowed", tokenMiddleware, showNotAllowed);
-
 router.get("/allowuser", tokenMiddleware, allowUser);
+
 
 module.exports = router;

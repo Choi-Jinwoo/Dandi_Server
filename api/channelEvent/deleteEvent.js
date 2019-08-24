@@ -5,10 +5,10 @@ const getChannelId = require("../channelEvent/getChannelId");
 module.exports = async function (req, res) {
     const user = req.user;
     
-    const req_id = req.query.id; //querystring으로 id를 받아옴
+    const req_event_id = req.query.id; //querystring으로 event_id를 받아옴
     
     try {
-        const req_channel_id = await getChannelId(req_id);
+        const req_channel_id = await getChannelId(req_event_id);
         
         if (!await isMember(user.user_id, req_channel_id)) { //멤버가 아니라면
             console.log("일정을 삭제할 권한이 없습니다 id : " + user.user_id);

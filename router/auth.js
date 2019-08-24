@@ -13,7 +13,7 @@ router.post("/signup/isoverlapped", isOverlapped);
 router.post("/signup/sendemail", (req, res) => {
         sendEmail(req)
         .then((randomCode) => {
-            return res.status(200).json({status : 200, message : "이메일 전송에 성공하였습니다", data : {authcode : randomCode}})
+            return res.status(200).json({status : 200, message : "이메일 전송에 성공하였습니다", data : {authCode : randomCode}})
         })
         .catch((err) => {
             console.log("이메일 전송중 오류 발생\n" + err);
