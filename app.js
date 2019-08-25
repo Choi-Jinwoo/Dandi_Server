@@ -2,7 +2,7 @@ const express =require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const models = require("./models");
-const auth = require("./middleware/auth");
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -14,6 +14,7 @@ app.use("/channel", require("./router/channel"));
 app.use("/channelAdmin", require("./router/channelAdmin"));
 app.use("/school", require("./router/school"));
 app.use("/channelevent", require("./router/channelEvent"));
+app.use("/profile", require("./router/profile"));
 /*
 cors회피
 app.use((req, res, next) => {
