@@ -3,6 +3,7 @@ const User = require("../../models/models").User;
 module.exports = function (req, res) {
     const req_user_id = req.body.user_id;
     const req_user_pw = req.body.user_pw;
+    const req_user_name = req.body.user_name;
     const req_user_email = req.body.user_email;
     const req_school_id = req.body.school;
     const req_user_phone = req.body.phone; //allowNull
@@ -15,6 +16,7 @@ module.exports = function (req, res) {
     User.create({
         user_id : req_user_id,
         user_pw : req_user_pw,
+        user_name : req_user_name,
         permission : 1, //member로 고정
         user_email : req_user_email,
         user_phone : req_user_phone,

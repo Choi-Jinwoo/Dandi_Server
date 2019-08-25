@@ -8,7 +8,7 @@ module.exports = async function (req, res) {
     const req_title = req.body.title;
     const req_start_date = req.body.start_date;
     const req_end_date = req.body.end_date;
-    const req_author = user.user_id; //현재 유저의 id
+    const req_author = user.user_name; //현재 유저의 id
 
     try {
         if (!await isMember(user.user_id, req_channel_id)) { //멤버가 아니라면

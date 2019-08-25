@@ -1,4 +1,3 @@
-const User = require("../../models/models").User;
 const searchById = require("../school/searchSchool").searchById;
 
 module.exports = async function(req, res) {
