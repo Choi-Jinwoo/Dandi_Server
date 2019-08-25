@@ -4,11 +4,14 @@ const addEvent = require("../api/channelEvent/addEvent");
 const deleteEvent = require("../api/channelEvent/deleteEvent");
 const updateEvent = require("../api/channelEvent/updateEvent");
 const searchEvent = require("../api/channelEvent/searchEvent");
+const getEvent = require("../api/channelEvent/getEvent");
+
 const router = express.Router();
 
 router.post("/addevent", tokenMiddleware,  addEvent);
 router.delete("/deleteevent", tokenMiddleware, deleteEvent);
 router.put("/updateevent", tokenMiddleware, updateEvent);
 router.get("/searchevent", tokenMiddleware, searchEvent);
+router.get("/getevent", tokenMiddleware, getEvent);
 
 module.exports = router;
