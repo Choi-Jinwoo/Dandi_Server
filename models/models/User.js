@@ -30,10 +30,12 @@ module.exports = function (sequelize, DataTypes) {
             allowNull : false
         },
         school_grade : {
-            type : DataTypes.INTEGER
+            type : DataTypes.INTEGER,
+            allowNull: true
         },
         school_class : {
             type : DataTypes.INTEGER,
+            allowNull: true
         },
         profile_pic : {
             type : DataTypes.STRING(500)
