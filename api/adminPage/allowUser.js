@@ -1,5 +1,6 @@
 const User = require("../../models/models").User;
 const makeSchoolData = require("../school/makeSchoolData");
+const sendEmail = require("./sendEmail");
 
 module.exports = async function (req, res) {
     const user = req.user;
@@ -24,6 +25,8 @@ module.exports = async function (req, res) {
 
         await User.update({ isAllowed : true}, {where : {user_id : allow_id}}); //유저 승인
         
+        await sendEmail(req_info.user_email, "[Schooler] 가입 승인되었습니다", "Schooler에 가입 승인되었습니다");
+
         console.log("승인이 완료되었습니다 id : " + allow_id);
         return res.status(200).json({status : 200, message : "승인이 완료되었습니다"});
     } catch(err) {
