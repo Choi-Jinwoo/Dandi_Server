@@ -19,7 +19,7 @@ const searchByName = async function (school_name) {
                 }
             } catch(err) {}
 
-            let listCount = schoolInfo.schoolInfo[0].head[0].list_total_count; //학교 개수
+            const listCount = schoolInfo.schoolInfo[0].head[0].list_total_count; //학교 개수
             const schoolList = [];
 
             try {

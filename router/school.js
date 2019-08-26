@@ -1,7 +1,7 @@
 const express = require("express");
-const searchSchool = require("../api/school/searchSchool").searchByName;
 const tokenMiddleware = require('../middleware/auth'); //middleware
-
+const searchSchool = require("../api/school/searchSchool").searchByName;
+const searchClass = require("../api/school/searchClass");
 const router = express.Router();
 
 router.get("/searchschool" , async (req, res) => {
@@ -20,5 +20,7 @@ router.get("/searchschool" , async (req, res) => {
         return res.status(500).json({status : 500, message : "학교에 대한 정보를 조회하는중 오류가 발생하였습니다"});
     }
 });
+
+router.get("/searchclass", searchClass);
 
 module.exports = router;
