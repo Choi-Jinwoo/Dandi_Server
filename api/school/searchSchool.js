@@ -21,15 +21,19 @@ const searchByName = async function (school_name) {
 
             let listCount = schoolInfo.schoolInfo[0].head[0].list_total_count; //학교 개수
             const schoolList = [];
-            
-            for (let i = 0; i < listCount; i++) {
-                schoolList[i] = {
-                    school_name : schoolInfo.schoolInfo[1].row[i].SCHUL_NM,
-                    school_locate : schoolInfo.schoolInfo[1].row[i].ORG_RDNMA,
-                    office_code : schoolInfo.schoolInfo[1].row[i].ATPT_OFCDC_SC_CODE,
-                    school_code : schoolInfo.schoolInfo[1].row[i].SD_SCHUL_CODE,
-                    school_type : schoolInfo.schoolInfo[1].row[i].SCHUL_KND_SC_NM
+
+            try {
+                for (let i = 0; i < listCount; i++) {
+                    schoolList[i] = {
+                        school_name : schoolInfo.schoolInfo[1].row[i].SCHUL_NM,
+                        school_locate : schoolInfo.schoolInfo[1].row[i].ORG_RDNMA,
+                        office_code : schoolInfo.schoolInfo[1].row[i].ATPT_OFCDC_SC_CODE,
+                        school_code : schoolInfo.schoolInfo[1].row[i].SD_SCHUL_CODE,
+                        school_type : schoolInfo.schoolInfo[1].row[i].SCHUL_KND_SC_NM
+                    }
                 }
+            } catch(err) {
+                return reject(err);
             }
             
             return resolve(schoolList);
@@ -54,14 +58,18 @@ const searchById = async function (school_id) {
                     return reject(404);
                 }
             } catch(err) {} //학교 정보가 있음
+            try {
+                return resolve({ //학교 정보를 반환함
+                    school_name : schoolInfo.schoolInfo[1].row[0].SCHUL_NM,
+                    school_locate : schoolInfo.schoolInfo[1].row[0].ORG_RDNMA,
+                    office_code : schoolInfo.schoolInfo[1].row[0].ATPT_OFCDC_SC_CODE,
+                    school_code : schoolInfo.schoolInfo[1].row[0].SD_SCHUL_CODE,
+                    school_type : schoolInfo.schoolInfo[1].row[0].SCHUL_KND_SC_NM
+                });
+            } catch(err) {
+                return reject(err);
+            }
             
-            return resolve({ //학교 정보를 반환함
-                school_name : schoolInfo.schoolInfo[1].row[0].SCHUL_NM,
-                school_locate : schoolInfo.schoolInfo[1].row[0].ORG_RDNMA,
-                office_code : schoolInfo.schoolInfo[1].row[0].ATPT_OFCDC_SC_CODE,
-                school_code : schoolInfo.schoolInfo[1].row[0].SD_SCHUL_CODE,
-                school_type : schoolInfo.schoolInfo[1].row[0].SCHUL_KND_SC_NM
-            });
         })  
     })
 
