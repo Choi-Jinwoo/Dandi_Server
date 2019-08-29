@@ -3,7 +3,7 @@ const neisInfo = require("../../config/neisInfo");
 
 const searchByName = async function (school_name) {
     const key = neisInfo.key;
-    const url = `http://open.neis.go.kr/hub/schoolInfo?SCHUL_NM=${encodeURI(school_name)}&Type=json&KEY=${key}`;
+    const url = `http://open.neis.go.kr/hub/schoolInfo?SCHUL_NM=${encodeURI(school_name)}&Type=json&KEY=${key}&pSize=800`;
     
     return new Promise((resolve, reject) => {
         request(url, (err, res, schoolInfo) => {
@@ -31,6 +31,7 @@ const searchByName = async function (school_name) {
                         school_code : schoolInfo.schoolInfo[1].row[i].SD_SCHUL_CODE,
                         school_type : schoolInfo.schoolInfo[1].row[i].SCHUL_KND_SC_NM
                     }
+                    
                 }
             } catch(err) {
                 return reject(err);
