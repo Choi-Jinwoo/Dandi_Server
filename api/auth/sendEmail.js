@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const emailInfo = require("../../config/emailInfo");
 
-module.exports = function (req) {
+module.exports = async function (req, res) {
     const req_email = req.body.user_email;
     const randomCode = makeRandomCode();
     
@@ -21,18 +21,21 @@ module.exports = function (req) {
         text : randomCode //content
     }
 
-    return new Promise ((resolve, reject) => {
-        transporter.sendMail(mailOptions, (err, info) => {
+    try {
+        await transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log("이메일 전송중 오류 발생\n" + err);
-                reject(err);
+                return res.status(500).json({status : 500, message : "이메일 전송 중 오류가 발생하였습니다"});
             } else {
                 console.log(`이메일 전송 완료 code : ${randomCode}`);
-                resolve(randomCode);
+                return res.status(200).json({status : 200, message : "이메일 전송에 성공하였습니다", data : {authCode : randomCode}})
             }
-            
-        })
-    })
+        })    
+    } catch(err) {
+        console.log("이메일 전송중 오류 발생\n" + err);
+        return res.status(500).json({status : 500, message : "이메일 전송 중 오류가 발생하였습니다"});
+    }
+    
 }
 
 function makeRandomCode() {

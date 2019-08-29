@@ -4,6 +4,8 @@ const getMyProfile = require("../api/profile/getMyProfile");
 const getOtherProfile = require("../api/profile/getOtherProfile");
 const router = express.Router();
 
+// const upload = multer({dest: "upload/"});
+
 router.get("/getmyprofile", tokenMiddleware, getMyProfile);
 router.get("/getotherprofile", tokenMiddleware, getOtherProfile);
 
