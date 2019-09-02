@@ -4,7 +4,6 @@ const signup = require("../api/auth/signup");
 const tokenMiddleware = require('../middleware/auth'); //middleware
 const isOverlapped = require("../api/auth/isOverlapped");
 const sendEmail = require("../api/auth/sendEmail");
-const multer = require("multer");
 const router = express.Router();
 
 router.post("/login",  login);
