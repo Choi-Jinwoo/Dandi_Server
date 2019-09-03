@@ -6,8 +6,8 @@ module.exports = async (req, res) => {
         return res.status(403).json({status : 403, message : "권한이 없습니다"});
     } else {
         try {
-            const userData = await User.findAll({isAllowed : false});
-
+            const userData = await User.findAll({where : {isAllowed : false}});
+            
             console.log("관리자가 유저정보를 조회하였습니다 id : " + req.user.user_id)
             return res.status(200).json({status : 200, message : "승인되지 않은 유저 정보 조회에 성공하였습니다", data : { user : userData }});
         } catch(err) {
