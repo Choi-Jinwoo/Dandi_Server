@@ -12,7 +12,12 @@ module.exports = async function (req, res) {
 
     const allow_id = req.query.user_id; //querystring으로 승인될 유저를 받아옴
     try {
-        const req_info = await User.findOne({where : {user_id : allow_id}}); //승인될 유저의 정보 검색
+        const req_info = await User.findOne({where : { user_id : allow_id, isAllowed : false }}); //승인될 유저의 정보 검색
+        
+        if (req_info === null || req_info === undefined) {
+            console.log("유저 정보가 없습니다 req_id : " + allow_id);
+            return res.status(400).json({status : 400, message : "유저 정보가 없습니다"});
+        }
 
         const result = await makeSchoolData(req_info.school);
         
