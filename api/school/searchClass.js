@@ -1,5 +1,4 @@
 const request = require("request");
-const searchById = require("./searchSchoolBy").searchById; //아이디로 학교정보를 찾음
 const neisInfo = require("../../config/neisInfo");
 
 module.exports = async function(req, res) {

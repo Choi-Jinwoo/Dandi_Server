@@ -1,5 +1,5 @@
 const School = require("../../models/models").School;
-const searchSchool = require("./searchSchool");
+const searchSchoolBy = require("./searchSchoolBy");
 
 module.exports = async function (req_school_id) {
     try {
@@ -9,7 +9,7 @@ module.exports = async function (req_school_id) {
             return 400;
         }
 
-        const new_school_data =  await searchSchool.searchById(req_school_id);
+        const new_school_data =  await searchSchoolBy.searchById(req_school_id);
         
         await School.create({
             id : new_school_data.school_code,

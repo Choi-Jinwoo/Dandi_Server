@@ -1,12 +1,12 @@
 const User = require("../../models/models").User;
 
 module.exports = async function(req, res) {
-	user = req.user;
+	const { user_id } = req.query
 
 	try {
 		const userPicData = await User.findOne({
 			attributes : [ "profile_pic" ],
-			where : {user_id : user.user_id}
+			where : {user_id : user_id}
 		});
 		const profile_pic = userPicData.profile_pic;
 		
