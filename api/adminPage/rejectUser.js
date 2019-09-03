@@ -13,6 +13,16 @@ module.exports = async function (req, res) {
     const reject_id = req.query.user_id; //querystring으로 거절될 유저를 받아옴
     try {
         const req_info = await User.findOne({where : {user_id : reject_id}}); //거절될 유저의 정보 검색
+        
+        if (req_info === null || req_info === undefined) {
+            console.log("유저정보가 없습니다(거절실패) id : " + reject_id);
+            return res.status(400).json({status : 400, message : "유저정보가 없습니다"});
+        }
+
+        if (req_info.isAllowed === true) {
+            console.log("이미 승인된 유저입니다(거절실패) id : " + req_info.user_id);
+            return res.status(400).json({status : 400, message : "이미 승인된 유저입니다"});
+        }
 
         await User.destroy({where : {user_id : reject_id}}); //유저 거절
         
