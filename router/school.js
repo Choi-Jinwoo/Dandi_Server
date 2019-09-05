@@ -5,8 +5,8 @@ const searchClass = require("../api/school/searchClass");
 const schoolEvent = require("../api/school/schoolEvent");
 const router = express.Router();
 
-router.get("/searchschool", searchSchool);
-router.get("/searchclass", searchClass);
-router.get("/schoolevent", tokenMiddleware, schoolEvent);
+router.get("/search-school", searchSchool);
+router.get("/search-class", searchClass);
+router.get("/school-event", tokenMiddleware, schoolEvent);
 
 module.exports = router;

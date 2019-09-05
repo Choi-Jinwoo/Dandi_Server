@@ -1,38 +1,49 @@
-const User = require("../../models/models").User;
-const makeSchoolData = require("../school/makeSchoolData");
+const models = require("../../models/models");
 const sendEmail = require("./sendEmail");
+const colorConsole = require("../../lib/console");
 
-module.exports = async function (req, res) {
+module.exports = async (req, res) => {
+    colorConsole.green("[adminPage] 승인대기 유저 거절");
     const user = req.user;
+    const { reject_id } = req.query; //querystring (user_id : reject user id)
 
-    if (user.permission !== 0) {
-        console.log("거절에 대한 권한이 없습니다 id : " + req.user.user_id);
-        return res.status(403).json({status : 403, message : "거절에 대한 권한이 없습니다"});
+    if (!reject_id) {
+        colorConsole.gray("검증 오류입니다.");
+        return res.status(400).json({ status : 400, message : "검증 오류입니다" });
     }
 
-    const reject_id = req.query.user_id; //querystring으로 거절될 유저를 받아옴
+    if (user.permission !== 0) {
+        colorConsole.yellow("[adminPage] 거절 권한이 없습니다.");
+        colorConsole.gray(user.user_id);
+        return res.status(403).json({ status : 403, message : "거절 권한이 없습니다." });
+    }
+    
     try {
-        const req_info = await User.findOne({where : {user_id : reject_id}}); //거절될 유저의 정보 검색
+        const rejectInfo = await models.User.findOne({ where : { user_id : reject_id } }); //find reject user
         
-        if (req_info === null || req_info === undefined) {
-            console.log("유저정보가 없습니다(거절실패) id : " + reject_id);
-            return res.status(400).json({status : 400, message : "유저정보가 없습니다"});
+        if (!rejectInfo) {
+            colorConsole.yellow("[adminPage] 유저 정보가 존재하지 않습니다.");
+            colorConsole.gray(reject_id);
+            return res.status(400).json({ status : 400, message : "유저 정보가 존재하지 않습니다." });
+        }
+        if (rejectInfo.isAllowed) {
+            colorConsole.yellow("[adminPage] 이미 승인된 유저입니다.");
+            colorConsole.gray(reject_id);
+            return res.status(400).json({ status : 400, message : "이미 승인된 유저입니다." });
         }
 
-        if (req_info.isAllowed === true) {
-            console.log("이미 승인된 유저입니다(거절실패) id : " + req_info.user_id);
-            return res.status(400).json({status : 400, message : "이미 승인된 유저입니다"});
-        }
+        await models.User.destroy({ where : { user_id : reject_id } });
+        await sendEmail(rejectInfo.user_email, "[단디] 회원가입이 거절되었습니다.", "[단디] 회원가입이 거절되었습니다.");
 
-        await User.destroy({where : {user_id : reject_id}}); //유저 거절
-        
-        await sendEmail(req_info.user_email, "[Schooler] 가입 거절되었습니다", "Schooler에 가입 거절되었습니다");
-
-        console.log("거절이 완료되었습니다 id : " + reject_id);
-        return res.status(200).json({status : 200, message : "거절이 완료되었습니다"});
+        return res.status(200).json({ status : 200, message : "회원가입 거절이 완료되었습니다." });
     } catch(err) {
-        console.log("거절중 오류가 발생하였습니다\n" + err);
-        return res.status(500).json({status : 500, message : "거절중 오류가 발생하였습니다"});
+        if (err.status === 500) { //sendEmail error
+            colorConsole.gray(err.message);
+            return res.status(500).json({ status : 500, message : err.message });
+        }
+        
+        colorConsole.gray(err.message);
+        return res.status(500).json({ status : 500, message : "회원가입 거절에 실패하였습니다." });
     }
     
 }

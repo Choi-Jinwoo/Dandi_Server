@@ -1,28 +1,32 @@
-const ChannelUser = require("../../models/models").ChannelUser;
-const Channel = require("../../models/models").Channel;
+const models = require("../../models/models");
+const colorConsole = require("../../lib/console");
 
-module.exports = async function(req, res) {
+module.exports = async (req, res) => {
+    colorConsole.green("[channel] 채널 탈퇴");
     const user = req.user;
-    const req_channel_id = req.query.channel_id; //querystring으로 channel_id를 받아옴
+    const { channel_id } = req.query; //querystring (channel_id : leave channel id)
     
+    if (!channel_id) {
+        colorConsole.gray("검증 오류입니다.");
+        return res.status(400).json({ status : 400, message : "검증 오류입니다" });
+    }
+
     try {
-        const userData = await ChannelUser.findOne({
-            where : { user_id : user.user_id, channel_id : req_channel_id }
-        })
-    
-        if (userData === null || userData === undefined) { //가입되지 않음
-            console.log("가입되지 않은 채널 탈퇴요청 id : " + user.user_id);
-            return res.status(400).json({ status : 400, message : "가입되지 않은 채널입니다" });
+        const deleteUser = await models.ChannelUser.destroy({ where : { user_id : user.user_id, channel_id } });
+        const channel = await models.Channel.findOne({ where : { id : channel_id } });
+
+        if (!deleteUser) {
+            colorConsole.yellow("[channel] 가입정보가 존재하지 않습니다.");
+            return res.status(400).json({ status : 400, message : "가입정보가 존재하지 않습니다." });
+        }
+        if (channel.create_user === user.user_id) {
+            colorConsole.yellow("[channel] 탈퇴가 불가능한 유저입니다.");
+            return res.status(400).json( {status : 400, message : "탈퇴가 불가능한 유저입니다." });
         }
 
-        await ChannelUser.destroy({
-            where : { user_id : user.user_id, channel_id : req_channel_id } 
-        })
-
-        console.log(`${req_channel_id} 채널 탈퇴에 성공하였습니다 ${user.user_id}`);
-        return res.status(200).json({status : 200, message : "채널에 탈퇴하였습니다"});
+        return res.status(200).json({ status : 200, message : "채널 탈퇴에 성공하였습니다." });
     } catch(err) {
-        console.log("채널 탈퇴중 오류가 발생하였습니다\n" + err);
-        return res.status(500).json({ status : 500, message : "채널 탈퇴중 오류가 발생하였습니다" });
+        colorConsole.gray(err.message);
+        return res.status(500).json({ status : 500, message : "채널 탈퇴에 실패하였습니다" });
     }
 }

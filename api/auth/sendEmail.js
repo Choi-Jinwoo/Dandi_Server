@@ -1,52 +1,22 @@
-const nodemailer = require('nodemailer');
-const emailInfo = require("../../config/emailInfo");
+const sendEmail = require("../adminPage/sendEmail");
+const randomCode = require("./randomCode");
+const colorConsole = require("../../lib/console");
 
-module.exports = async function (req, res) {
-    const req_email = req.body.user_email;
-    const randomCode = makeRandomCode();
+module.exports = async (req, res) => {
+    colorConsole.green("[auth] 인증번호 발송")
+    const { user_email } = req.body;
+    const authCode = randomCode();
     
-    const transporter = nodemailer.createTransport({
-        service : "Gmail",
-        auth : {
-            user : emailInfo.id, //google id
-            pass : emailInfo.pw, //google pw
-            domain : ""
-        }
-    })
-
-    const mailOptions = {
-        from : emailInfo.id, //google id
-        to : req_email,
-        subject : "[schooler] 이메일 인증", //title
-        text : randomCode //content
+    if (!user_email) {
+        colorConsole.gray("검증 오류입니다.");
+        return res.status(400).json({ status : 400, message : "검증 오류입니다" });
     }
 
     try {
-        await transporter.sendMail(mailOptions, (err, info) => {
-            if (err) {
-                console.log("이메일 전송중 오류 발생\n" + err);
-                return res.status(500).json({status : 500, message : "이메일 전송 중 오류가 발생하였습니다"});
-            } else {
-                console.log(`이메일 전송 완료 code : ${randomCode}`);
-                return res.status(200).json({status : 200, message : "이메일 전송에 성공하였습니다", data : {authCode : randomCode}})
-            }
-        })    
+        await sendEmail(user_email, "[단디] 인증번호", randomCode);
+        return res.status(200).json({ status : 200, message : "인증번호 발송에 성공하였습니다.", data : { authCode } });
     } catch(err) {
-        console.log("이메일 전송중 오류 발생\n" + err);
-        return res.status(500).json({status : 500, message : "이메일 전송 중 오류가 발생하였습니다"});
+        colorConsole.gray(err.message);
+        return res.status(500).json({ status : 500, message : "인증번호 발송에 실패하였습니다." });
     }
-    
-}
-
-function makeRandomCode() {
-    let code = "";
-    const code_length = 10;
-    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-
-    for (let i = 0; i < code_length; i++) {
-        const rnum = Math.floor(Math.random() * chars.length);
-        code += chars.substring(rnum, rnum + 1);
-    }
-
-    return code;
 }

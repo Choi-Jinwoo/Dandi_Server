@@ -1,29 +1,35 @@
-const User = require("../../models/models").User;
+const models  = require("../../models/models");
 const createToken = require("../../lib/token").createToken
-module.exports = async function (req, res) {
-    const req_id = req.body.user_id;
-    const req_pw = req.body.user_pw;
+const colorConsole = require("../../lib/console");
+
+module.exports = async (req, res) => {
+    colorConsole.green("[auth] 로그인");
+    const { user_id , user_pw } = req.body;
+
+    if (!(user_id && user_pw)) {
+        colorConsole.gray("검증 오류입니다.");
+        return res.status(400).json({ status : 400, message : "검증 오류입니다" });
+    }
+
     try {
-        userData = await User.findOne({where : {
-            user_id : req_id,
-            user_pw : req_pw,
-        }})
-    
-        if (userData === null || userData === undefined) {
-            console.log("일치하는 회원 정보가 없습니다 req ID : " + req_id)
-            return res.status(401).json({ status : 401, message : "일치하는 회원 정보가 없습니다"});
+        const userData = await models.User.findOne({ where  : { user_id, user_pw }});
+        
+        if (!userData) {
+            colorConsole.yellow("[auth] 유저 정보가 존재하지 않습니다.");
+            return res.status(401).json({ status : 401, message : "유저 정보가 존재하지 않습니다" });
         }
-    
-        if (!userData.isAllowed) { //승인 되지 않은 유저 
-            console.log("승인되지 않은 유저의 로그인 요청 id :" + req_id)
-            return res.status(403).json({ status : 403, message : "승인되지 않은 유저입니다"});            
+        if (!userData.isAllowed) {
+            colorConsole.yellow("[auth] 승인되지 않은 유저입니다.");
+            return res.status(401).json({ status : 401, message : "승인되지 않은 유저입니다." });
         }
-    
-        const token = createToken(req_id); //토큰 생성
-        console.log("회원이 접속하였습니다 ID : " + req_id);
-        return res.status(200).json({ status : 200, message : "로그인에 성공 했습니다", data : {token}});
+
+        const token = createToken(user_id);
+        colorConsole.green("[auth] 로그인에 성공하였습니다.");
+        colorConsole.gray(user_id);
+        return res.status(200).json({ status : 200, message : "로그인에 성공하였습니다.", data : { token } });
     } catch(err) {
-        console.error(err);
-        return res.status(500).json({ status : 500, message : "예기치 못한 오류가 발생하였습니다"});
+        colorConsole.gray(err.message);
+        colorConsole.gray(user_id);
+        return res.status(500).json({ status : 500, message : "로그인에 실패하였습니다." });
     } 
 }

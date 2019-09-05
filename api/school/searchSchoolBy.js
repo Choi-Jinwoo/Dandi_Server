@@ -12,7 +12,7 @@ const searchByName = async function (school_name) {
             }
             schoolInfo = JSON.parse(schoolInfo);
             try {
-                if (schoolInfo.RESULT.CODE === "INFO-200") { //학교 정보가 없을경우 false반환
+                if (schoolInfo.RESULT.CODE === "INFO-200") { //학교 정보가 없을경우 404반환
                     return reject(404);
                 }
             } catch(err) {}
@@ -59,11 +59,11 @@ const searchById = async function (school_id) {
             } catch(err) {} //학교 정보가 있음
             try {
                 return resolve({ //학교 정보를 반환함
-                    school_name : schoolInfo.schoolInfo[1].row[0].SCHUL_NM,
-                    school_locate : schoolInfo.schoolInfo[1].row[0].ORG_RDNMA,
-                    office_code : schoolInfo.schoolInfo[1].row[0].ATPT_OFCDC_SC_CODE,
-                    school_code : schoolInfo.schoolInfo[1].row[0].SD_SCHUL_CODE,
-                    school_type : schoolInfo.schoolInfo[1].row[0].SCHUL_KND_SC_NM
+                    name : schoolInfo.schoolInfo[1].row[0].SCHUL_NM,
+                    locate : schoolInfo.schoolInfo[1].row[0].ORG_RDNMA,
+                    officeCode : schoolInfo.schoolInfo[1].row[0].ATPT_OFCDC_SC_CODE,
+                    schoolCode : schoolInfo.schoolInfo[1].row[0].SD_SCHUL_CODE,
+                    type : schoolInfo.schoolInfo[1].row[0].SCHUL_KND_SC_NM
                 });
             } catch(err) {
                 return reject(err);

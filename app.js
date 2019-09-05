@@ -11,11 +11,11 @@ app.use(cors());
 app.use(origin);
 app.use('/static', express.static(__dirname + '/public'));
 app.use("/auth", require('./router/auth'));
-app.use("/adminpage", require('./router/adminPage'));
+app.use("/admin-page", require('./router/adminPage'));
 app.use("/channel", require("./router/channel"));
-app.use("/channelAdmin", require("./router/channelAdmin"));
+app.use("/channel-admin", require("./router/channelAdmin"));
 app.use("/school", require("./router/school"));
-app.use("/channelevent", require("./router/channelEvent"));
+app.use("/channel-event", require("./router/channelEvent"));
 app.use("/profile", require("./router/profile"));
 app.use("/image" , require("./router/image"));
 

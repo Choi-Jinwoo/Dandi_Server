@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post("/login",  login);
 router.post("/signup", signup);
-router.post("/signup/isoverlapped", isOverlapped);
-router.post("/signup/sendemail", sendEmail);
+router.post("/signup/is-overlapped", isOverlapped);
+router.post("/signup/email", sendEmail);
 
 module.exports = router;

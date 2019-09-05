@@ -1,43 +1,40 @@
-const Channel = require("../../models/models").Channel;
+const models = require("../../models/models");
+const colorConsole = require("../../lib/console");
 
-module.exports = async function (req, res) {
+module.exports = async (req, res) => {
+    colorConsole.green("[channel] 채널 검색");
     const user = req.user;
     
-    const req_channel_name = req.query.channel_name; //querystring으로 channel_name을 받아옴
-    const req_school = user.school;
+    const { channel_name } = req.query; //querystring (channel_name : search channel name)
 
-    if (!req_channel_name) {
+    if (!channel_name) { //search All school channel
         try {
-            const schoolChannel = await Channel.findAll({
-                where : { school_id : req_school }
-            })
-    
-            if (schoolChannel === null || schoolChannel === undefined) { //채널에 대한 정보가 없을경우
-                console.log(`[${req_school}]학교 채널 정보가 없습니다`);
-                return res.status(400).json({status : 400, message : "학교 채널 정보가 없습니다"});
+            const channels = await models.Channel.findAll({ where : { school_id : user.school }});
+            
+            if (!channels.length) {
+                colorConsole.yellow("[channel] 채널 정보가 존재하지 않습니다.");
+                colorConsole.gray(user.school);
+                return res.sta(400).json({ status : 400, message : "채널 정보가 존재하지 않습니다."});
             }
-    
-            console.log(`[${req_school}]학교 채널 정보를 조회하였습니다 id : ${user.user_id}`); 
-            return res.status(200).json({status : 200, message : "학교 채널 정보를 조회하였습니다", data : {channel : schoolChannel}});
+            
+            return res.status(200).json({ status : 200, message : "채널 조회에 성공하였습니다.", data : { channels } });
         } catch(err) {
-            console.log("채널을 조회중 오류가 발생하였습니다\n" + err);
-            return res.status(500).json({status : 500, message : "채널을 조회중 오류가 발생하였습니다"});
+            colorConsole.gray(err.message);
+            return res.status(500).json({ status : 500, message : "채널 조회에 실패하였습니다." });
         }
-    } else {
-        try {
-            schoolChannel = await Channel.findOne({
-                where : { name : req_channel_name, school_id : req_school }
-            })
-    
-            if (schoolChannel === null || schoolChannel === undefined) {
-                console.log(`[${req_school}]학교에 ${req_channel_name} 채널에 대한 정보가 없습니다`);
-                return res.status(400).json({status : 400, message : "채널에 대한 정보가 없습니다"})
-            }
-            console.log(`[${req_school}]학교에 ${req_channel_name} 채널에 대한 정보를 조회하였습니다 id : ${user.user_id}`);
-            return res.status(200).json({status : 200, message : "채널에 대한 정보를 조회하였습니다", data : {channel : schoolChannel}});    
-        } catch(err) {
-            console.log("채널을 조회중 오류가 발생하였습니다\n" + err);
-            return res.status(500).json({status : 500, message : "채널을 조회중 오류가 발생하였습니다"});
+    }
+
+    try { //search channel_name
+        channel = await models.Channel.findOne({ where : { name : channel_name, school_id : user.school } })
+
+        if (!channel) {
+            colorConsole.yellow("[channel] 채널 정보가 존재하지 않습니다.");
+            return res.status(400).json({ status : 400, message : "[channel] 채널 정보가 존재하지 않습니다." });
         }
+        
+        return res.status(200).json({ status : 200, message : "채널 조회에 성공하였습니다.", data : { channel }});    
+    } catch(err) {
+        colorConsole.gray(err.message);
+        return res.status(500).json({ status : 500, message : "채널 조회에 실패하였습니다." });
     }
 }
