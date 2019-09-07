@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
         
         if (!userData) {
             colorConsole.yellow("[auth] 유저 정보가 존재하지 않습니다.");
-            return res.status(401).json({ status : 401, message : "유저 정보가 존재하지 않습니다" });
+            return res.status(400).json({ status : 400, message : "유저 정보가 존재하지 않습니다." });
         }
         if (!userData.isAllowed) {
             colorConsole.yellow("[auth] 승인되지 않은 유저입니다.");

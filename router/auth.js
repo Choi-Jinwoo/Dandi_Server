@@ -7,8 +7,8 @@ const sendEmail = require("../api/auth/sendEmail");
 const router = express.Router();
 
 router.post("/login",  login);
-router.post("/signup", signup);
-router.post("/signup/is-overlapped", isOverlapped);
-router.post("/signup/email", sendEmail);
+router.post("/sign-up", signup);
+router.post("/sign-up/is-overlapped", isOverlapped);
+router.post("/sign-up/email", sendEmail);
 
 module.exports = router;

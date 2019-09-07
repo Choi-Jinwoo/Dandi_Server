@@ -1,26 +1,27 @@
-const User = require("../../models/models").User;
+const models = require("../../models/models");
+const colorConsole = require("../../lib/console");
 
-module.exports = async function(req, res) {
-	const { user_id } = req.query
+module.exports = async (req, res) => {
+	colorConsole.green("[image] 프로필 URL 전송");
+	const { user_id } = req.query; //querystring (user_id : user_id profile)
+
+	if (!user_id) { 
+		colorConsole.yellow("[image] 검증 오류입니다.");
+		return res.status(400).json({ status : 400, message : "검증 오류입니다." });
+	}
 
 	try {
-		const userPicData = await User.findOne({
-			attributes : [ "profile_pic" ],
-			where : {user_id : user_id}
-		});
-		const profile_pic = userPicData.profile_pic;
-		
-		if (profile_pic === null || profile_pic === undefined) { //기본 프로필 사진
-			const picture_url = `${req.origin}/static/image/basic_profile.png`; //basic_profile.png
-			console.log("기본 프로필 사진 url을 전송하였습니다");
-			return res.status(200).json({status : 200, message : "기본 프로필 사진url을 전송하였습니다", data : { url : picture_url }});
-		}
-		const picture_url = `${req.origin}/static/image/${profile_pic}`;
+		const profilePic = await models.User.findOne({ attributes : [ "profile_pic" ], where : { user_id } });
 
-		console.log("프로필 사진 url을 전송하였습니다");
-		return res.status(200).json({status : 200, message : "프로필 사진url을 전송하였습니다", data : { url : picture_url }});
+		if (!profilePic) {
+			const profileUrl = `${req.origin}/static/image/basic_profile.png`;
+			return res.status(200).json({ status : 200, message : "URL 전송에 성공하였습니다.", data : { profileUrl } });
+		}
+
+		const profileUrl = `${req.origin}/static/image/${profilePic}`;
+		return res.status(200).json({ status : 200, message : "URL 전송에 성공하였습니다.", data : { profileUrl } });
 	} catch(err) {
-		console.log("프로필 사진 url 전송중 오류가 발생하였습니다\n" + err);
-		return res.status(500).json({status : 500, message : "프로필 사진url 전송중 오류가 발생하였습니다"});
+		colorConsole.gray(err.message);
+		return res.status(500).json({ status : 500, message : "URL 전송에 실패하였습니다." });
 	}
 }

@@ -7,6 +7,7 @@ module.exports = async (req, res) => {
 
     const { body } = req;
     body.permission = 1; //set permission member
+    body.profile_pic = null;
     body.isAllowed = false;
 
     try {
@@ -19,9 +20,9 @@ module.exports = async (req, res) => {
     try {
         await models.User.create(body);
         
-        return res.status(201).json({ status : 201, message : "회원가입이 완료되었습니다" });
+        return res.status(201).json({ status : 201, message : "회원가입이 완료되었습니다." });
     } catch(err) {
         colorConsole.gray(err.message);
-        return res.status(500).json({status : 500, message : "회원가입에 실패하였습니다"});
+        return res.status(500).json({status : 500, message : "회원가입에 실패하였습니다."});
     }
 }

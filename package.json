@@ -18,6 +18,7 @@
     "mysql2": "^1.6.5",
     "nodemailer": "^6.3.0",
     "request": "^2.88.0",
+    "request-promise": "^4.2.4",
     "sequelize": "^5.15.1"
   },
   "devDependencies": {},

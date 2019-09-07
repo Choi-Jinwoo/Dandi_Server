@@ -1,12 +1,8 @@
 const express = require("express");
 const tokenMiddleware = require('../middleware/auth'); //middleware
-const getMyProfile = require("../api/profile/getMyProfile");
-const getOtherProfile = require("../api/profile/getOtherProfile");
+const getProfile = require("../api/profile/getProfile");
 const router = express.Router();
 
-// const upload = multer({dest: "upload/"});
-
-router.get("/getmyprofile", tokenMiddleware, getMyProfile);
-router.get("/getotherprofile", tokenMiddleware, getOtherProfile);
+router.get("/", tokenMiddleware, getProfile);
 
 module.exports = router;

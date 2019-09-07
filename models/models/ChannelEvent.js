@@ -28,7 +28,7 @@ module.exports = function (sequelize, DataTypes) {
             allowNull : false
         },
         author: {
-            field: 'autor',
+            field: 'author',
             type : DataTypes.STRING(45),
             allowNull : false
         }
@@ -40,5 +40,10 @@ module.exports = function (sequelize, DataTypes) {
         })
     }
     
+    ChannelEvent.associate = (models) => {
+        models.ChannelEvent.belongsTo(models.User, {
+            foreignKey : "author"
+        })
+    }
     return ChannelEvent;
 }

@@ -1,15 +1,12 @@
-const ChannelUser = require("../../models/models").ChannelUser;
+const models = require("../../models/models");
 
-module.exports = async function (user_id, req_channel_id) {
+module.exports = async (userId, channelId) => {
     try {
-        const result = await ChannelUser.findOne({ //자신이 속해있는가
-            where : { user_id : user_id, channel_id : req_channel_id, isAllowed : true }
-        }) 
-
-        if (result === null || undefined) {
+        const isMember = await models.ChannelUser.findOne({ where : { user_id : userId, channel_id : channelId, isAllowed : true } });
+        if (!isMember) {
             return false;
         }
-
+        
         return true;
     } catch(err) {
         throw err;

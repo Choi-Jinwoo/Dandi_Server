@@ -55,5 +55,10 @@ module.exports = function (sequelize, DataTypes) {
         }
     })
 
+    User.associate = (models) => {
+        models.User.hasMany(models.ChannelEvent, {
+            foreignKey : "channel_id"
+        })
+    }
     return User;
 }

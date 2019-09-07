@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     }
 
     try {
-        const overlapUser = await User.findOne({ where : { user_id } });
+        const overlapUser = await models.User.findOne({ where : { user_id } });
 
         if (overlapUser) {
             colorConsole.yellow("[auth] 중복된 아이디입니다.");

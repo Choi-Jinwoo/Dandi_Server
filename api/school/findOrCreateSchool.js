@@ -1,18 +1,18 @@
 const models = require("../../models/models");
-const searchSchoolBy = require("./searchSchoolBy");
+const searchSchool = require("./searchSchool");
 const colorConsole = require("../../lib/console");
 
-module.exports = async function (schoolId) {
+module.exports = async (schoolId) => {
     try {
-        const schoolData = await searchSchoolBy.searchById(schoolId);
+        const schoolData = await searchSchool.searchById(schoolId);
 
         models.School.findOrCreate({
             where : { id : schoolId },
             defaults : {
                 id : schoolId,
-                name : schoolData.name,
-                type : schoolData.type,
-                office_code : schoolData.officeCode,
+                name : schoolData.school_name,
+                type : schoolData.school_type,
+                office_code : schoolData.office_code,
             },
         })
         .spread((school ,created) => {
@@ -28,7 +28,6 @@ module.exports = async function (schoolId) {
             } //no schoolInfo(throw 404 object)
         }
         
-        colorConsole.red(err.message);
         throw err;
     }
 }

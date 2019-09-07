@@ -1,16 +1,16 @@
-const ChannelEvent = require("../../models/models").ChannelEvent;
+const models = require("../../models/models");
 
-module.exports = async function(event_id) {
+module.exports = async (eventId) => {
     try {
-        const findChannel = await ChannelEvent.findOne({
-            where : { id : event_id }
-        })
-
-        if (findChannel === null || findChannel === undefined) {
-            throw "일정이 존재하지 않습니다"
+        const channel = await models.ChannelEvent.findOne({ where : { id : eventId} })
+        if (!channel) {
+            throw {
+                status : 404,
+                message : "일정이 존재하지 않습니다."
+            }
         }
-        
-        return findChannel.channel_id;
+
+        return channel.id;
     } catch(err) {
         throw err;
     }

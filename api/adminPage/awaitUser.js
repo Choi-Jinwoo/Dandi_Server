@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     if (user.permission !== 0) {
         colorConsole.yellow("[adminPage] 조회 권한이 없습니다.");
         colorConsole.gray(user.user_id);
-        return res.status(403).json({status : 403, message : "조회 권한이 없습니다."});
+        return res.status(403).json({ status : 403, message : "조회 권한이 없습니다." });
     }
     
     try {

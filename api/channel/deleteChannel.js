@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     
     if (!channel_id) {
         colorConsole.gray("검증 오류입니다.");
-        return res.status(400).json({ status : 400, message : "검증 오류입니다" });
+        return res.status(400).json({ status : 400, message : "검증 오류입니다." });
     }
 
     try {
@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
         
         if (channel.create_user !== user.user_id) {
             colorConsole.yellow("[channel] 삭제 권한이 없습니다.");
-            return res.status(401).json({ status : 401, message : "삭제 권한이 없습니다."});
+            return res.status(403).json({ status : 403, message : "삭제 권한이 없습니다."});
         }
    
         await models.ChannelUser.destroy({ where : { channel_id } });

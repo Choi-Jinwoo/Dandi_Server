@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
             if (!channels.length) {
                 colorConsole.yellow("[channel] 채널 정보가 존재하지 않습니다.");
                 colorConsole.gray(user.school);
-                return res.sta(400).json({ status : 400, message : "채널 정보가 존재하지 않습니다."});
+                return res.status(400).json({ status : 400, message : "채널 정보가 존재하지 않습니다."});
             }
             
             return res.status(200).json({ status : 200, message : "채널 조회에 성공하였습니다.", data : { channels } });
@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
 
         if (!channel) {
             colorConsole.yellow("[channel] 채널 정보가 존재하지 않습니다.");
-            return res.status(400).json({ status : 400, message : "[channel] 채널 정보가 존재하지 않습니다." });
+            return res.status(400).json({ status : 400, message : "채널 정보가 존재하지 않습니다." });
         }
         
         return res.status(200).json({ status : 200, message : "채널 조회에 성공하였습니다.", data : { channel }});    
