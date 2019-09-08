@@ -1,7 +1,7 @@
 exports.sequelizeInit = async () => {
     const models = require("./models");
 
-    models.sequelize.sync({force : false})
+    models.sequelize.sync({ force : false })
     .then(() => {
             console.log("Databases sync");
     })

@@ -10,6 +10,10 @@ module.exports = function (sequelize, DataTypes) {
             type : DataTypes.STRING(45),
             allowNull : false
         },
+        explain : {
+            type : DataTypes.STRING(100),
+            allowNull : false
+        },
         create_user : {
             type : DataTypes.STRING(45),
             allowNull : false

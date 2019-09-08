@@ -4,13 +4,13 @@ const colorConsole = require("../../lib/console");
 module.exports = async (req, res) => {
     colorConsole.green("[channel] 채널 추가");
     const user = req.user;    
-    const { name, color, isPublic } = req.body;
+    const { name, explain, color, isPublic } = req.body;
     const school_id = user.school;
 
     colorConsole.gray("request");
-    colorConsole.gray({ name , color, isPublic });
+    colorConsole.gray({ name, explain, color, isPublic });
 
-    if (!name || (isPublic === null || isPublic === undefined)) {
+    if (!name || (isPublic === null || isPublic === undefined) || !explain) {
         colorConsole.yellow("검증 오류입니다.");
         return res.status(400).json({ status : 400, message : "검증 오류입니다" });
     }
@@ -25,6 +25,7 @@ module.exports = async (req, res) => {
 
         const created_channel = await models.Channel.create({
             name,
+            explain,
             create_user : user.user_id,
             color,
             school_id,
