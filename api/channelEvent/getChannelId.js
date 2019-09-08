@@ -9,8 +9,8 @@ module.exports = async (eventId) => {
                 message : "일정이 존재하지 않습니다."
             }
         }
-
-        return channel.id;
+        
+        return channel.channel_id;
     } catch(err) {
         throw err;
     }

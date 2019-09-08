@@ -8,6 +8,9 @@ module.exports = async (req, res) => {
 	const user = req.user;
 	let { year, month } = req.query;
 	
+	colorConsole.gray("request");
+	colorConsole.gray({ year, month });
+	
 	if (!(year && month)) {
 		console.log("검증 오류입니다.");
 		return res.status(400).json({ status : 400, message : "검증 오류입니다." });
@@ -26,7 +29,7 @@ module.exports = async (req, res) => {
 		
 		await request(url, (err, response, schoolEvent) => {
 			if (err) {
-				colorConsole.gray(err.message);
+				colorConsole.red(err.message);
 				return res.status(500).json({ status : 500, message : "학사일정 조회에 실패하였습니다." });
 			}
 			
@@ -40,10 +43,13 @@ module.exports = async (req, res) => {
 				events[i] = { title, date }
 			}
 			
+			colorConsole.gray("response");
+			colorConsole.gray({ events });
+
 			return res.status(200).json({ status : 200, message : "학사일정 조회에 성공하였습니다.", data : { events } });
 		})
 	} catch (err) {
-		colorConsole.gray(err.message);
+		colorConsole.red(err.message);
 		return res.status(500).json({ status : 500, message : "학사일정 조회에 실패하였습니다." });
 	}
 }

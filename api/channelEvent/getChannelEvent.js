@@ -6,11 +6,13 @@ const Sequelize = require("sequelize");
 module.exports = async (req, res) => {
     colorConsole.green("[channelEvent] 일정 조회");
     const user = req.user;
-    
     const { channel_id } = req.query; //querystring (channel_id : get events channel)
     
+    colorConsole.gray("request");
+    colorConsole.gray({ channel_id });
+
     if (!channel_id) {
-        colorConsole.gray("검증 오류입니다.");
+        colorConsole.yellow("검증 오류입니다.");
         return res.status(400).json({ status : 400, message : "검증 오류입니다." });
     }
 
@@ -28,9 +30,12 @@ module.exports = async (req, res) => {
         const query = `SELECT ${attributes} FROM channelevents LEFT JOIN users ON channelevents.author=users.user_id WHERE channel_id = :channel_id`;
         const events = await models.sequelize.query(query, { replacements, type : Sequelize.QueryTypes.SELECT });
         
+        colorConsole.gray("response");
+        colorConsole.gray({ events });
+
         return res.status(200).json({ status : 200, message : "일정 조회에 성공하였습니다.", data : { events } });
     } catch(err) {
-        colorConsole.gray(err.message);
+        colorConsole.red(err.message);
         return res.status(500).json({ status : 500, message : "일정 조회에 실패하였습니다." });
     }
 }

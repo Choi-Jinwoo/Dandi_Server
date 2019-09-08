@@ -39,8 +39,8 @@ module.exports = async (req, res, next) => {
             case 'jwt expired':
                 return res.status(400).json({ status : 400, message : "토큰이 만료되었습니다." });
             default:
-                colorConsole.gray(err.message);
-                return res.status(400).json({ status : 500, message : "다시 시도해 주세요." });              
+                colorConsole.red(err.message);
+                return res.status(500).json({ status : 500, message : "다시 시도해 주세요." });              
           }
     }
 }

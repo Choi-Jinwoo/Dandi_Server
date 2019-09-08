@@ -7,14 +7,16 @@ const getChannelId = require("../channelEvent/getChannelId");
 module.exports = async function (req, res) {
     colorConsole.green("[channelEvent] 일정 변경");
     const user = req.user;
-    
     const { body } = req;
     body.author = user.user_id;
     
+    colorConsole.gray("request");
+    colorConsole.gray({ body });
+
     try {
         await Validation.validateUpdateEvent(body);
     } catch(err) {
-        colorConsole.gray(err.message);
+        colorConsole.yellow(err.message);
         return res.status(400).json({ status : 400, message : "검증 오류입니다." });
     }
     
@@ -31,7 +33,7 @@ module.exports = async function (req, res) {
 
         return res.status(200).json({ status : 200, message : "일정 변경에 성공하였습니다." });
     } catch(err) {
-        colorConsole.gray(err.message);
+        colorConsole.red(err.message);
         return res.status(500).json({ status : 500, message : "일정 변경에 실패하였습니다." });
     }
 }

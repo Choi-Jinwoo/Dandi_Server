@@ -10,10 +10,13 @@ module.exports = async (req, res) => {
     const { body } = req;
     body.author = user.user_id;
 
+    colorConsole.gray("request");
+    colorConsole.gray({ body });
+
     try {
-        Validation.validateAddEvent(body);
+        await Validation.validateAddEvent(body);
     } catch(err) {
-        colorConsole.gray(err.message);
+        colorConsole.yellow("검증 오류입니다.");
         return res.status(400).json({ status : 400, message : "검증 오류입니다." });
     }
 
@@ -23,10 +26,10 @@ module.exports = async (req, res) => {
             return res.status(403).json({ status : 403, message : "일정 추가 권한이 없습니다." });
         }
         
-        await models.ChannelEvent.create({ body });
+        await models.ChannelEvent.create(body);
         return res.status(200).json({ status : 200, message : "일정 추가에 성공하였습니다." });
     } catch(err) {
-        colorConsole.gray(err.message);
+        colorConsole.red(err.message);
         return res.status(500).json({ status : 500, message : "일정 추가에 실패하였습니다." });
     }
 }

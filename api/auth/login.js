@@ -6,8 +6,11 @@ module.exports = async (req, res) => {
     colorConsole.green("[auth] 로그인");
     const { user_id , user_pw } = req.body;
 
+    colorConsole.gray("request");
+    colorConsole.gray({ user_id });
+
     if (!(user_id && user_pw)) {
-        colorConsole.gray("검증 오류입니다.");
+        colorConsole.yellow("검증 오류입니다.");
         return res.status(400).json({ status : 400, message : "검증 오류입니다" });
     }
 
@@ -24,12 +27,10 @@ module.exports = async (req, res) => {
         }
 
         const token = createToken(user_id);
-        colorConsole.green("[auth] 로그인에 성공하였습니다.");
-        colorConsole.gray(user_id);
+
         return res.status(200).json({ status : 200, message : "로그인에 성공하였습니다.", data : { token } });
     } catch(err) {
-        colorConsole.gray(err.message);
-        colorConsole.gray(user_id);
+        colorConsole.red(err.message);
         return res.status(500).json({ status : 500, message : "로그인에 실패하였습니다." });
     } 
 }

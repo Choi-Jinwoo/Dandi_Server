@@ -7,8 +7,11 @@ module.exports = async (req, res) => {
     const { name, color, isPublic } = req.body;
     const school_id = user.school;
 
+    colorConsole.gray("request");
+    colorConsole.gray({ name , color, isPublic });
+
     if (!name || (isPublic === null || isPublic === undefined)) {
-        colorConsole.gray("검증 오류입니다.");
+        colorConsole.yellow("검증 오류입니다.");
         return res.status(400).json({ status : 400, message : "검증 오류입니다" });
     }
 
@@ -17,8 +20,6 @@ module.exports = async (req, res) => {
         
         if (channelExist) {
             colorConsole.yellow("[channel] 이미 채널이 존재합니다.");
-            colorConsole.gray(channelExist.name);
-            colorConsole.gray(channelExist.school_id);
             return res.status(400).json({ status : 400, message : "이미 채널이 존재합니다." });
         }
 
@@ -41,10 +42,10 @@ module.exports = async (req, res) => {
     } catch(err) {
         try {
             await models.Channel.destroy({ where : { name, school_id } });
-            colorConsole.gray(err.message);
+            colorConsole.red(err.message);
             return res.status(500).json({ status : 500, message : "채널 개설에 실패하였습니다." });
         } catch(err) {
-            colorConsole.gray(err.message);
+            colorConsole.red(err.message);
             return res.status(500).json({ status : 500, message : "채널 개설에 실패하였습니다." });
         }
     }

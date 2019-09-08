@@ -8,14 +8,17 @@ module.exports = async (req, res) => {
     const user = req.user;
     const { event_id }  = req.query; //querystring (event_id : delete event_id)
     
+    colorConsole.gray("request");
+    colorConsole.gray({ event_id });
+
     if (!event_id) {
-        colorConsole.gray("검증 오류입니다.");
+        colorConsole.yellow("검증 오류입니다.");
         return res.status(400).json({ status : 400, message : "검증 오류입니다." });
     }
 
     try {
         const channelId = await getChannelId(event_id);
-
+        
         if (!await isMember(user.user_id, channelId)) {
             colorConsole.yellow("[channelEvent] 일정 삭제 권한이 없습니다.")
             return res.status(403).json({ status : 403, message : "일정 삭제 권한이 없습니다." });
@@ -29,7 +32,7 @@ module.exports = async (req, res) => {
             colorConsole.yellow(err.message);
             return res.status(err.status).json({ status : err.status, message : err.message });
         }
-        colorConsole.gray(err.message);
+        colorConsole.red(err.message);
         return res.status(500).json({ status : 500, message : "일정 삭제에 실패하였습니다." });
     }
 }

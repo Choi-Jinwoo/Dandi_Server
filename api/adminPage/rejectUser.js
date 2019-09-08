@@ -6,15 +6,17 @@ module.exports = async (req, res) => {
     colorConsole.green("[adminPage] 승인대기 유저 거절");
     const user = req.user;
     const { reject_id } = req.query; //querystring (user_id : reject user id)
+    
+    colorConsole.gray("request");
+    colorConsole.gray({ reject_id });
 
     if (!reject_id) {
-        colorConsole.gray("검증 오류입니다.");
+        colorConsole.yellow("검증 오류입니다.");
         return res.status(400).json({ status : 400, message : "검증 오류입니다" });
     }
 
     if (user.permission !== 0) {
         colorConsole.yellow("[adminPage] 거절 권한이 없습니다.");
-        colorConsole.gray(user.user_id);
         return res.status(403).json({ status : 403, message : "거절 권한이 없습니다." });
     }
     
@@ -23,12 +25,10 @@ module.exports = async (req, res) => {
         
         if (!rejectInfo) {
             colorConsole.yellow("[adminPage] 유저 정보가 존재하지 않습니다.");
-            colorConsole.gray(reject_id);
             return res.status(400).json({ status : 400, message : "유저 정보가 존재하지 않습니다." });
         }
         if (rejectInfo.isAllowed) {
             colorConsole.yellow("[adminPage] 이미 승인된 유저입니다.");
-            colorConsole.gray(reject_id);
             return res.status(400).json({ status : 400, message : "이미 승인된 유저입니다." });
         }
 
@@ -38,11 +38,14 @@ module.exports = async (req, res) => {
         return res.status(200).json({ status : 200, message : "회원가입 거절이 완료되었습니다." });
     } catch(err) {
         if (err.status === 500) { //sendEmail error
-            colorConsole.gray(err.message);
+            colorConsole.red(err.message);
             return res.status(500).json({ status : 500, message : err.message });
+        } else if (err.status === 400) {
+            colorConsole.yellow(err.message);
+            return res.status(400).json({ status  : 400, message : err.message });
         }
         
-        colorConsole.gray(err.message);
+        colorConsole.red(err.message);
         return res.status(500).json({ status : 500, message : "회원가입 거절에 실패하였습니다." });
     }
     

@@ -7,8 +7,11 @@ module.exports = async (req, res) => {
     const key = neisInfo.key;
     const { school_id, office_id, grade } = req.query;
 
+    colorConsole.gray("request");
+	colorConsole.gray({ school_id, office_id, grade });
+
     if (!(school_id && office_id && grade)) {
-        colorConsole.gray("검증 오류입니다.");
+        colorConsole.yellow("검증 오류입니다.");
         return res.status(400).json("검증 오류입니다.");
     }
 
@@ -28,12 +31,15 @@ module.exports = async (req, res) => {
                     return res.status(404).json({ status : 404, message : "학년 정보가 존재하지 않습니다." });
                 }
             }
-            
             const classCount = classInfo.classInfo[0].head[0].list_total_count;
-            return res.status(200).json({ status : 200, message : "학년 정보 조회에 성공하였습니다.", data : { classCount  } });
+            
+            colorConsole.gray("response");
+            colorConsole.gray({ classCount });
+
+            return res.status(200).json({ status : 200, message : "학년 정보 조회에 성공하였습니다.", data : { classCount } });
         })
     } catch(err) {
-        colorConsole.gray(err.message);
+        colorConsole.red(err.message);
         return res.status(500).json({ status : 500, message : "학년 정보 조회에 실패히였습니다." });
     }
 }
