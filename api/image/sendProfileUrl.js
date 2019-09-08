@@ -13,12 +13,12 @@ module.exports = async (req, res) => {
 	try {
 		const profilePic = await models.User.findOne({ attributes : [ "profile_pic" ], where : { user_id } });
 
-		if (!profilePic) {
+		if (!profilePic.profile_pic) {
 			const profileUrl = `${req.origin}/static/image/basic_profile.png`;
 			return res.status(200).json({ status : 200, message : "URL 전송에 성공하였습니다.", data : { profileUrl } });
 		}
 
-		const profileUrl = `${req.origin}/static/image/${profilePic}`;
+		const profileUrl = `${req.origin}/static/image/${profilePic.profile_pic}`;
 		return res.status(200).json({ status : 200, message : "URL 전송에 성공하였습니다.", data : { profileUrl } });
 	} catch(err) {
 		colorConsole.gray(err.message);

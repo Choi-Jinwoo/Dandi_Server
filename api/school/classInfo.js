@@ -6,6 +6,12 @@ module.exports = async (req, res) => {
     colorConsole.green("[school] 반 정보 조회");
     const key = neisInfo.key;
     const { school_id, office_id, grade } = req.query;
+
+    if (!(school_id && office_id && grade)) {
+        colorConsole.gray("검증 오류입니다.");
+        return res.status(400).json("검증 오류입니다.");
+    }
+
     const url = `http://open.neis.go.kr/hub/classInfo?SD_SCHUL_CODE=${school_id}&ATPT_OFCDC_SC_CODE=${office_id}&GRADE=${grade}&Type=json&KEY=${key}`;
 
     try {
@@ -18,7 +24,7 @@ module.exports = async (req, res) => {
 
             if(classInfo.RESULT !== undefined) {
                 if (classInfo.RESULT.CODE === "INFO-200") { //no class info
-                    colorConsole.yellow("학년 정보가 존재하지 않습니다.");
+                    colorConsole.yellow("[school] 학년 정보가 존재하지 않습니다.");
                     return res.status(404).json({ status : 404, message : "학년 정보가 존재하지 않습니다." });
                 }
             }
