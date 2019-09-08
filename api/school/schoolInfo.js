@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
 	try {
 		const schoolInfo = await searchSchool.searchByName(school_name);
 
-		colorConsole.gray("request");
+		colorConsole.gray("response");
 		colorConsole.gray({ schoolInfo });
 
 		return res.status(200).json({ status : 200, message : "학교 정보 조회에 성공하였습니다.", data : { schoolInfo }});
