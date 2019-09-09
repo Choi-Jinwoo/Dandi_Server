@@ -39,8 +39,9 @@ module.exports = async (req, res) => {
 			
 			for (let i = 0; i < eventCount; i++) {
 				const title = schoolEvent.SchoolSchedule[1].row[i].EVENT_NM;
-				const date = schoolEvent.SchoolSchedule[1].row[i].AA_YMD;
-				events[i] = { title, date }
+				const start_date = schoolEvent.SchoolSchedule[1].row[i].AA_YMD;
+				const end_date = schoolEvent.SchoolSchedule[1].row[i].AA_YMD;
+				events[i] = { title, start_date, end_date }
 			}
 			
 			colorConsole.gray("response");
