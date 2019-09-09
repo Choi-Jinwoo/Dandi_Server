@@ -1,6 +1,7 @@
 const models = require("../../models/models");
 const searchSchool = require("../school/searchSchool");
 const colorConsole = require("../../lib/console");
+const getProfileUrl = require("../image/getProfileUrl");
 
 module.exports = async (req, res) => {
     colorConsole.green("[profile] 프로필 조회");
@@ -12,10 +13,12 @@ module.exports = async (req, res) => {
 
     if (!user_id) {
         try {
-            const { user_id, user_name, user_email, user_phone, school, school_grade, school_class, profile_pic, isPublic } = user;
-            const userInfo = { user_id, user_name, user_email, user_phone, school, school_grade, school_class, profile_pic, isPublic };
+            const { user_id, user_name, user_email, user_phone, school, school_grade, school_class, isPublic } = user;
+            const userInfo = { user_id, user_name, user_email, user_phone, school, school_grade, school_class, isPublic };
+            
             userInfo.school = await searchSchool.searchById(user.school);
-    
+            userInfo.profile_pic = await getProfileUrl(req, user.user_id);
+
             colorConsole.gray("response");
             colorConsole.gray({ userInfo });
 
@@ -31,9 +34,11 @@ module.exports = async (req, res) => {
     }
     
     try {
-        const attributes = [ "user_id", "user_name", "user_email", "user_phone", "school", "school_grade", "school_class", "profile_pic", "isPublic" ];
+        const attributes = [ "user_id", "user_name", "user_email", "user_phone", "school", "school_grade", "school_class", "isPublic" ];
         const userInfo = await models.User.findOne({ attributes ,  where : { user_id }, raw : true });
+        
         userInfo.school = await searchSchool.searchById(userInfo.school);
+        userInfo.profile_pic = await getProfileUrl(req, user_id);
 
         if (!userInfo) {
             colorConsole.yellow("[profile] 유저 정보가 존재하지 않습니다.");
