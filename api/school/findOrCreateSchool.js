@@ -17,7 +17,7 @@ module.exports = async (schoolId) => {
         })
         .spread((school ,created) => {
             if (created) {
-                colorConsole.green("학교 생성에 성공하였습니다.");
+                return;
             }
         });
     } catch(err) {

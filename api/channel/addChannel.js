@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
             pushNotify : false,
         });
 
-        return res.status(200).json({ status : 200, message : "채널 개설에 성공하였습니다." });
+        return res.status(200).json({ status : 200, message : "채널 개설에 성공하였습니다.", data : { channel_id : created_channel.id } });
     } catch(err) {
         try {
             await models.Channel.destroy({ where : { name, school_id } });

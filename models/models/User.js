@@ -38,7 +38,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         profile_pic : {
-            type : DataTypes.STRING(500)
+            type : DataTypes.STRING(500),
+            allowNull : true
         },
         pushNotify : {
             type : DataTypes.BOOLEAN,

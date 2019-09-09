@@ -29,11 +29,14 @@ module.exports = (sequelize, DataTypes) => {
             type : DataTypes.BOOLEAN,
             allowNull : false
         },
-        createdAt: {
-            field: 'created_at',
+        created_at: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
             allowNull : false
+        },
+        thumbnail : {
+            type : DataTypes.STRING(500),
+            allowNull : true
         },
     })
 

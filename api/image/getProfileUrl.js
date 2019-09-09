@@ -7,7 +7,7 @@ module.exports = async (req, user_id) => {
 
 		let profileUrl;
 		if (!profilePic.profile_pic) {
-			profileUrl = `${req.origin}/static/image/basic_profile.png`;
+			profileUrl = `${req.origin}/static/image/profile_basic.png`;
 		} else {
 			profileUrl = `${req.origin}/static/image/${profilePic.profile_pic}`;
 		}

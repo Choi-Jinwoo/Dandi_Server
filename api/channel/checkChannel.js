@@ -1,5 +1,6 @@
 const models = require("../../models/models");
 const colorConsole = require("../../lib/console");
+const getThumbnailUrl = require("../image/getThumbnailUrl");
 
 module.exports = async (req, res) => {
     colorConsole.green("[channel] 가입 채널 조회");
@@ -7,12 +8,16 @@ module.exports = async (req, res) => {
 
     try {
         const joinedChannel = await models.ChannelUser.findAll({ where : { user_id : user.user_id }, raw : true });
-    
+        
         if (!joinedChannel.length) {
             colorConsole.yellow("[channel] 가입 채널이 존재하지 않습니다.");
             return res.status(400).json({ status : 400, message : "가입 채널이 존재하지 않습니다." });
         }
 
+        for (let i = 0; i < joinedChannel.length; i++) {
+            joinedChannel[i].thumbnail = await getThumbnailUrl(req, joinedChannel[i].channel_id);
+        }
+ 
         colorConsole.gray("response");
         colorConsole.gray({ joinedChannel });
         

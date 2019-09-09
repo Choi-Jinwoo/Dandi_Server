@@ -1,5 +1,6 @@
 const models = require("../../models/models");
 const colorConsole = require("../../lib/console");
+const getThumbnailUrl = require("../image/getThumbnailUrl");
 
 module.exports = async (req, res) => {
     colorConsole.green("[channel] 채널 검색");
@@ -18,6 +19,10 @@ module.exports = async (req, res) => {
                 return res.status(400).json({ status : 400, message : "채널 정보가 존재하지 않습니다."});
             }
             
+            for (let i = 0; i < channels.length; i++) {
+                channels[i].thumbnail = await getThumbnailUrl(req, channels[i].channel_id);
+            }
+
             colorConsole.gray("response");
             colorConsole.gray({ channels });
 
@@ -35,7 +40,9 @@ module.exports = async (req, res) => {
             colorConsole.yellow("[channel] 채널 정보가 존재하지 않습니다.");
             return res.status(400).json({ status : 400, message : "채널 정보가 존재하지 않습니다." });
         }
-
+        
+        channel.thumbnail = await getThumbnailUrl(req, channel.id);
+        
         colorConsole.gray("response");
         colorConsole.gray({ channel });
         
