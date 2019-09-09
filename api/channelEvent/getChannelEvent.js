@@ -1,7 +1,6 @@
 const models = require("../../models/models");
 const colorConsole = require("../../lib/console");
 const isMember = require("./isMember");
-const Sequelize = require("sequelize");
 
 module.exports = async (req, res) => {
     colorConsole.green("[channelEvent] 일정 조회");
@@ -28,7 +27,7 @@ module.exports = async (req, res) => {
         }
 
         const query = `SELECT ${attributes} FROM channelevents LEFT JOIN users ON channelevents.author=users.user_id WHERE channel_id = :channel_id`;
-        const events = await models.sequelize.query(query, { replacements, type : Sequelize.QueryTypes.SELECT });
+        const events = await models.sequelize.query(query, { replacements, type : models.Sequelize.QueryTypes.SELECT });
         
         colorConsole.gray("response");
         colorConsole.gray({ events });

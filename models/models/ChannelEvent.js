@@ -1,36 +1,36 @@
 module.exports = (sequelize, DataTypes) => {
     const ChannelEvent = sequelize.define("ChannelEvent", {
         id: { 
+            field: "id",
             type : DataTypes.INTEGER(45),
-            field: 'id',
-            allowNull : false,
             primaryKey : true,
             autoIncrement : true,
+            allowNull : false,
         },
         channel_id: {
-            field: 'channel_id',
+            field: "channel_id",
             type : DataTypes.INTEGER(45),
-            allowNull : false
+            allowNull : false,
         },
         title: {
-            field: 'title',
+            field: "title",
             type : DataTypes.STRING(45),
             allowNull : false,
         },
         start_date: { 
-            field: 'start_date',
+            field: "start_date",
             type: DataTypes.DATE,
-            allowNull: false
+            allowNull: false,
         },
         end_date: {
-            field: 'end_date',
+            field: "end_date",
             type : DataTypes.DATE,
-            allowNull : false
+            allowNull : false,
         },
         author: {
-            field: 'author',
+            field: "author",
             type : DataTypes.STRING(45),
-            allowNull : false
+            allowNull : false,
         }
     });
 

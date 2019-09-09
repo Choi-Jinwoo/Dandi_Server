@@ -2,30 +2,30 @@ module.exports = (sequelize, DataTypes) => {
     const ChannelUser = sequelize.define("ChannelUser", {
         id: { 
             type : DataTypes.INTEGER(45),
-            field: 'id',
-            allowNull : false,
+            field: "id",
             primaryKey : true,
             autoIncrement : true,
+            allowNull : false,
         },
         user_id: {
-            field: 'user_id',
+            field: "user_id",
             type : DataTypes.STRING(45),
-            allowNull : false
+            allowNull : false,
         },
         channel_id: {
-            field: 'channel_id',
+            field: "channel_id",
             type : DataTypes.INTEGER(45),
             allowNull : false,
         },
         isAllowed: { 
-            field: 'isAllowed',
+            field: "isAllowed",
             type: DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: false,
         },
         pushNotify: {
-            field: 'pushNotify',
+            field: "pushNotify",
             type : DataTypes.BOOLEAN,
-            allowNull : false
+            allowNull : false,
         }
     });
 

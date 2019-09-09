@@ -1,7 +1,6 @@
 const models = require("../../models/models");
 const colorConsole = require("../../lib/console");
 const isMember = require("./isMember");
-const Sequelize = require("sequelize");
 
 module.exports = async (req, res) => {
     colorConsole.green("[channelEvent] 일정 검색")
@@ -24,7 +23,7 @@ module.exports = async (req, res) => {
 
         const attributes = "user_id, user_name, user_email, school, school_grade, school_class, profile_pic, id, channel_id, title, start_date, end_date"
         const query = `SELECT ${attributes} FROM channelevents LEFT JOIN users ON channelevents.author=users.user_id WHERE channel_id = ${channel_id} AND title LIKE '%${keyword}%'`;
-        const events = await models.sequelize.query(query, { type : Sequelize.QueryTypes.SELECT });
+        const events = await models.sequelize.query(query, { type : models.Sequelize.QueryTypes.SELECT });
         
         if (!events.length) {
             colorConsole.yellow("[channelEvent] 검색 결과가 존재하지 않습니다.");

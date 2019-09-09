@@ -1,58 +1,72 @@
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define("User", {
-        user_id : { //fk
+        user_id : {
+            field : "user_id",
             type : DataTypes.STRING(45),
             primaryKey : true,
             autoIncrement : false,
-            allowNull : false
+            allowNull : false,
         }, 
         user_pw : {
+            field : "user_pw",
             type : DataTypes.STRING,
-            allowNull : false
+            allowNull : false,
         },
-        user_name : { //fk
+        user_name : {
+            field : "user_name",
             type : DataTypes.STRING(45),
-            allowNull : false
+            allowNull : false,
         },
         permission : {
+            field : "permission",
             type : DataTypes.INTEGER,
             allowNull : false,
         },
         user_email : {
+            field : "user_email",
             type : DataTypes.STRING,
-            allowNull : false
+            allowNull : false,
         },
         user_phone : {
-            type : DataTypes.STRING(45)
-        },
-        school : { //fk
+            field : "user_phone",
             type : DataTypes.STRING(45),
-            allowNull : false
+            allowNull : true,
+        },
+        school : {
+            field : "school",
+            type : DataTypes.STRING(45),
+            allowNull : false,
         },
         school_grade : {
+            field : "school_grade",
             type : DataTypes.INTEGER,
-            allowNull: true
+            allowNull: true,
         },
         school_class : {
+            field : "school_class",
             type : DataTypes.INTEGER,
-            allowNull: true
+            allowNull: true,
         },
         profile_pic : {
+            field : "profile_pic",
             type : DataTypes.STRING(500),
-            allowNull : true
+            allowNull : true,
         },
         pushNotify : {
-            type : DataTypes.BOOLEAN,
-            allowNull : false
-        },
-        isPublic : {
-            type : DataTypes.BOOLEAN,
-            allowNull : false
-        },
-        isAllowed : {
+            field : "pushNotify",
             type : DataTypes.BOOLEAN,
             allowNull : false,
-            defaultValue : false
+        },
+        isPublic : {
+            field : "isPublic",
+            type : DataTypes.BOOLEAN,
+            allowNull : false,
+        },
+        isAllowed : {
+            field : "isAllowed",
+            type : DataTypes.BOOLEAN,
+            defaultValue : false,
+            allowNull : false,
         }
     })
 
