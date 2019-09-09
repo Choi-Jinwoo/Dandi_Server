@@ -2,41 +2,42 @@ module.exports = (sequelize, DataTypes) => {
     const Channel = sequelize.define("Channel", {
         id : { 
             type : DataTypes.INTEGER(45),
-            allowNull : false,
             primaryKey : true,
-            autoIncrement : true
+            autoIncrement : true,
+            allowNull : false,
         },
         name : {
             type : DataTypes.STRING(45),
-            allowNull : false
+            allowNull : false,
         },
         explain : {
             type : DataTypes.STRING(100),
-            allowNull : false
+            allowNull : false,
         },
         create_user : {
             type : DataTypes.STRING(45),
-            allowNull : false
+            allowNull : false,
         },
         color : {
             type : DataTypes.STRING(45),
+            allowNull : true,
         },
         school_id : {
             type : DataTypes.STRING(45),
-            allowNull : false
+            allowNull : false,
         },
         isPublic : {
             type : DataTypes.BOOLEAN,
-            allowNull : false
+            allowNull : false,
         },
         created_at: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
-            allowNull : false
+            allowNull : false,
         },
         thumbnail : {
             type : DataTypes.STRING(500),
-            allowNull : true
+            allowNull : true,
         },
     })
 

@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
             }
             
             for (let i = 0; i < channels.length; i++) {
-                channels[i].thumbnail = await getThumbnailUrl(req, channels[i].channel_id);
+                channels[i].thumbnail = await getThumbnailUrl(req, channels[i].id);
             }
 
             colorConsole.gray("response");
