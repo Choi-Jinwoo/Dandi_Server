@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
             allowNull : false
-          },
+        },
     })
 
     Channel.associate = (models) => {

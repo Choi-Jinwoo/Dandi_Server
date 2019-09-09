@@ -35,11 +35,6 @@ Object.keys(models).forEach((modelName) => {
     }
 })
 
-module.exports = {
-    sequelize,
-    User,
-    School,
-    Channel,
-    ChannelUser,
-    ChannelEvent,
-};
+models.sequelize = sequelize;
+
+module.exports = models;

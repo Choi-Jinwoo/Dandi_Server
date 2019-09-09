@@ -7,7 +7,6 @@ module.exports = async (req, res) => {
 
     const { body } = req;
     body.permission = 1; //set permission member
-    body.profile_pic = null;
     body.isAllowed = false;
     
     const { user_id, user_name, user_email, user_phone, school, school_grade, school_class } = body;
