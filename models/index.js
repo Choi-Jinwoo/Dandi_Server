@@ -1,11 +1,13 @@
+const colorConsole = require("../lib/console");
+
 exports.sequelizeInit = async () => {
     const models = require("./models");
 
     models.sequelize.sync({ force : false })
     .then(() => {
-            console.log("Databases sync");
+        colorConsole.green("Databases sync");
     })
     .catch((err) => {
-            console.error(err);
+        colorConsole.red(err.message);
     })
 }

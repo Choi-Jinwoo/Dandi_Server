@@ -1,4 +1,4 @@
-module.exports = function (sequelize, DataTypes) {
+module.exports = (sequelize, DataTypes) => {
     const ChannelEvent = sequelize.define("ChannelEvent", {
         id: { 
             type : DataTypes.INTEGER(45),

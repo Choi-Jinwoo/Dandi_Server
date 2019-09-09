@@ -1,4 +1,4 @@
-module.exports = function (sequelize, DataTypes) {
+module.exports = (sequelize, DataTypes) => {
     const ChannelUser = sequelize.define("ChannelUser", {
         id: { 
             type : DataTypes.INTEGER(45),

@@ -16,7 +16,6 @@ module.exports = async (req, res, next) => {
         const decoded = tokenLib.verifyToken(token);
         
         if (decoded.sub !== "token") {
-            console.log(decoded);
             return res.status(403).json({ status : 403, message : "잘못된 토큰입니다." });
         }
 

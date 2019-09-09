@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const models = require("./models");
 const origin = require("./middleware/origin"); //middleware
+const colorConsole = require("./lib/console");
 const app = express();
 
 app.use(bodyParser.json());
@@ -27,5 +28,5 @@ app.get("/api", (req, res) => {
 })
 
 app.listen(5000, () => {
-    console.log(`Server is running at port 5000`);
+    colorConsole.green(`server is running at port 5000`);
 })
