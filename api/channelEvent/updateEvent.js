@@ -11,7 +11,7 @@ module.exports = async function (req, res) {
     body.author = user.user_id;
     
     colorConsole.gray("request");
-    colorConsole.gray({ body });
+    colorConsole.gray({ event_id, body });
 
     if (!event_id) {
         colorConsole.yellow("검증 오류입니다.");
