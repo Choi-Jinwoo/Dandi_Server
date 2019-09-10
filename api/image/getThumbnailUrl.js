@@ -7,7 +7,7 @@ module.exports = async (req, channel_id) => {
 		
 		let thumbnailUrl;
 		if (!thumbnail.thumbnail) {
-			thumbnailUrl = `${req.origin}/static/image/thumbnail_basic.png`;
+			thumbnailUrl = `${req.origin}/static/image/thumbnail_basic.jpg`;
 		} else {
 			thumbnailUrl = `${req.origin}/static/image/${thumbnail.thumbnail}`;
 		}
