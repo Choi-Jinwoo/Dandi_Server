@@ -4,26 +4,25 @@ const neisInfo = require("../../config/neisInfo");
 exports.searchByName = async (school_name) => {
     const key = neisInfo.key;
     const url = `http://open.neis.go.kr/hub/schoolInfo?SCHUL_NM=${encodeURI(school_name)}&Type=json&KEY=${key}&pSize=800`;
-    
-    try {
-        let schoolList;
+    let schoolList;
 
+    return new Promise(async (resolve, reject) => {
         await request(url, (err, response, schoolInfo) => {
             if (err) {
-                throw err;
+                return reject(err);
             }
-
+            
             schoolInfo = JSON.parse(schoolInfo);
             
             if(schoolInfo.RESULT !== undefined) {
                 if (schoolInfo.RESULT.CODE === "INFO-200") { //no school info
-                    throw {
+                    return reject ({
                         status : 404,
                         message : "학교 정보가 존재하지 않습니다."
-                    }
+                    });
                 }
             }
-
+            
             const listCount = schoolInfo.schoolInfo[0].head[0].list_total_count;
             const _schoolList = [];
             for (let i = 0; i < listCount; i++) {
@@ -37,32 +36,34 @@ exports.searchByName = async (school_name) => {
             }
             schoolList = _schoolList;
         });
-
-        return schoolList;
-    } catch(err) {
-        throw err;
-    }
+        
+        return resolve(schoolList);
+    })
+    
+    
 }
 
-exports.searchById = async (school_id) => {
+exports.searchById = (school_id) => {
     const key = neisInfo.key;
     const url = `http://open.neis.go.kr/hub/schoolInfo?SD_SCHUL_CODE=${encodeURI(school_id)}&Type=json&KEY=${key}`;
     
-    try {
-        let schoolInfo;
+    
+    let schoolInfo;
+
+    return new Promise(async (resolve, reject) => {
         await request(url, (err, response, _schoolInfo) => {
             if (err) {
-                throw err;
+                return reject(err);
             }
 
             _schoolInfo = JSON.parse(_schoolInfo);
 
             if(_schoolInfo.RESULT !== undefined) {
                 if (schoolInfo.RESULT.CODE === "INFO-200") { //no school info
-                    throw {
+                    return reject({
                         status : 404,
                         message : "학교 정보가 존재하지 않습니다."
-                    }
+                    });
                 }
             }
             
@@ -77,8 +78,6 @@ exports.searchById = async (school_id) => {
             schoolInfo = _schoolInfo;
         });
 
-        return schoolInfo;
-    } catch(err) {
-        throw err;
-    }
+        return resolve(schoolInfo);
+    })
 }

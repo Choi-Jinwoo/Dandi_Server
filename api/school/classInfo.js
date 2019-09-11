@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
 
     if (!(school_id && office_id && grade)) {
         colorConsole.yellow("검증 오류입니다.");
-        return res.status(400).json("검증 오류입니다.");
+        return res.status(400).json({ status : 400, message : "검증 오류입니다." });
     }
 
     const url = `http://open.neis.go.kr/hub/classInfo?SD_SCHUL_CODE=${school_id}&ATPT_OFCDC_SC_CODE=${office_id}&GRADE=${grade}&Type=json&KEY=${key}`;
@@ -20,7 +20,8 @@ module.exports = async (req, res) => {
     try {
         await request(url, (err, response, classInfo) => {
             if (err) {
-                throw err;
+                colorConsole.red(err.message);
+                return res.status(500).json({ status : 500, message : "학년 정보 조회에 실패히였습니다." });
             }
 
             classInfo = JSON.parse(classInfo);
