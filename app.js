@@ -20,8 +20,6 @@ app.use("/channel-event", require("./router/channelEvent"));
 app.use("/profile", require("./router/profile"));
 app.use("/image" , require("./router/image"));
 
-models.sequelizeInit();
-
 //get api docs
 app.get("/api", (req, res) => {
     res.redirect("https://b1nd-4th.gitbook.io/dandi-api/?fbclid=IwAR2ejEuhKJh_xDqvJ0-kHZMcJCSHj0wT6uWJou7s4RYlCvGC8FeOrIVmeQY");

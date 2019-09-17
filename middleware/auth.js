@@ -1,14 +1,14 @@
 const express = require('express');
 const colorConsole = require("../lib/console");
 const tokenLib = require("../lib/token");
-const models = require("../models/models");
+const models = require("../models");
 
 /**
  * @param {express.Request} req
  */
 module.exports = async (req, res, next) => {
-    const { token } = req.headers;
-    
+    //const { token } = req.headers;
+    const token = req.headers["x-access-token"];
     if (!token) {
         return res.status(400).json({ status : 400, message : "토큰이 전송되지 않았습니다." });
     }
