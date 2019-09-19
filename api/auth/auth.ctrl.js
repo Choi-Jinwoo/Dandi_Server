@@ -72,7 +72,7 @@ exports.login = async (req, res) => {
 
 	try {
 		const userData = await models.User.getUserForLogin(user_id, user_pw)
-		console.log(userData);
+		
 		if (!userData) {
 			colorConsole.yellow('[auth] 유저 정보가 존재하지 않습니다.');
 			return res.status(400).json({ status : 400, message : '유저 정보가 존재하지 않습니다.' });

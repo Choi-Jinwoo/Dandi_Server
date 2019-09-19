@@ -128,7 +128,7 @@ exports.schoolEvent = async (req, res) => {
 	colorConsole.gray({ year, month });
 	
 	if (!(year && month)) {
-		console.log('검증 오류입니다.');
+		colorConsole.yellow('검증 오류입니다.');
 		return res.status(400).json({ status : 400, message : '검증 오류입니다.' });
 	}
 
