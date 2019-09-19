@@ -71,11 +71,18 @@ exports.login = async (req, res) => {
 	}
 
 	try {
-		const userData = await models.User.getUserForLogin(user_id, user_pw)
-		
-		if (!userData) {
+		const userExist = await models.User.getUser(user_id);
+
+		if (!userExist) {
 			colorConsole.yellow('[auth] 유저 정보가 존재하지 않습니다.');
 			return res.status(400).json({ status : 400, message : '유저 정보가 존재하지 않습니다.' });
+		}
+
+		const userData = await models.User.getUserForLogin(user_id, user_pw);
+		
+		if (!userData) {
+			colorConsole.yellow('[auth] 비밀번호가 일치하지 않습니다.');
+			return res.status(400).json({ status : 400, message : '비밀번호가 일치하지 않습니다.' });
 		}
 		
 		if (!userData.isAllowed) {
