@@ -262,7 +262,8 @@ exports.checkChannel = async (req, res) => {
 		}
 
 		for (let i = 0; i < joinedChannel.length; i++) {
-			joinedChannel[i].thumbnail = await getThumbnailUrl(req, joinedChannel[i].channel_id);
+			joinedChannel[i] = await models.Channel.getChannel(joinedChannel[i].channel_id);
+			joinedChannel[i].thumbnail = await getThumbnailUrl(req, joinedChannel[i].id);
 		}
 
 		colorConsole.gray('<response>');
