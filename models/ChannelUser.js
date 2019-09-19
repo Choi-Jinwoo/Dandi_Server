@@ -59,10 +59,18 @@ module.exports = (sequelize, DataTypes) => {
         where : {
             user_id,
             channel_id,
+            isAllowed : true,
         },
         raw : true,
     });
 
+    ChannelUser.getChannelUserByUserAndChannel = (user_id, channel_id) => ChannelUser.findOne({
+        where : {
+            user_id,
+            channel_id,
+        },
+        raw : true,
+    });
     ChannelUser.awaitUser = (channel_id) => ChannelUser.findAll({
         where : {
             channel_id,

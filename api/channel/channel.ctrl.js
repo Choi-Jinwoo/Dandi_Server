@@ -195,6 +195,16 @@ exports.searchChannel = async (req, res) => {
 		}
 		
 		for (let i = 0; i < channels.length; i++) {
+			const userStatus = await models.ChannelUser.getChannelUserByUserAndChannel(user.user_id, channels[i].id);
+			
+			if (!userStatus) {
+				channels[i].userStatus = 0;
+			} else if (!userStatus.isAllowed) {
+				channels[i].userStatus = 1;
+			} else {
+				channels[i].userStatus = 2;
+			}
+
 			channels[i].thumbnail = await getThumbnailUrl(req, channels[i].id);
 		}
 
