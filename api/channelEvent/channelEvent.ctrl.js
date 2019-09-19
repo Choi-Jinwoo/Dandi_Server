@@ -1,6 +1,7 @@
 const models = require('../../models');
 const colorConsole = require('../../lib/console');
 const Validation = require('../../lib/validation');
+const { getThumbnailUrl } = require('../image/image.ctrl');
 
 exports.getChannelEvent = async (req, res) => {
 	colorConsole.green('[channelEvent] 일정 조회');
@@ -25,6 +26,11 @@ exports.getChannelEvent = async (req, res) => {
 		
 		for (let i = 0; i < events.length; i++) {
 			const userInfo = await models.User.getUser(events[i].author);
+			const channelInfo = await models.Channel.getChannel(events[i].channel_id);
+			channelInfo.thumbnail = await getThumbnailUrl(req, events[i].channel_id);
+
+			events[i].channel = channelInfo;
+
 			events[i].author = {
 				user_id : userInfo.user_id,
 				user_name : userInfo.user_name,
@@ -140,6 +146,10 @@ exports.searchEvent = async (req, res) => {
 
 		for (let i = 0; i < events.length; i++) {
 			const userInfo = await models.User.getUser(events[i].author);
+			const channelInfo = await models.Channel.getChannel(events[i].channel_id);
+			channelInfo.thumbnail = await getThumbnailUrl(req, events[i].channel_id);
+
+			events[i].channel = channelInfo;
 			events[i].author = {
 				user_id : userInfo.user_id,
 				user_name : userInfo.user_name, //for문이 안돔
