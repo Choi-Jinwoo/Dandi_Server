@@ -1,6 +1,7 @@
 const sendEmail = require('../../lib/sendEmail');
 const colorConsole = require('../../lib/console');
 const models = require('../../models');
+
 exports.awaitUser = async (req, res) => {
 	colorConsole.green('[adminPage] 승인대기 유저 조회');
 	const user = req.user;

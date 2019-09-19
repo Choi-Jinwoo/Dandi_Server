@@ -52,18 +52,18 @@ module.exports = (sequelize, DataTypes) => {
             type : DataTypes.STRING(500),
             allowNull : true,
         },
-        push_notify : {
-            field : 'pushNotify',
+        pushNotify : {
+            field : 'push_notify',
             type : DataTypes.BOOLEAN,
             allowNull : false,
         },
-        is_public : {
-            field : 'isPublic',
+        isPublic : {
+            field : 'is_public',
             type : DataTypes.BOOLEAN,
             allowNull : false,
         },
-        is_allowed : {
-            field : 'isAllowed',
+        isAllowed : {
+            field : 'is_allowed',
             type : DataTypes.BOOLEAN,
             defaultValue : false,
             allowNull : false,
@@ -102,21 +102,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         raw : true,
     });
-
-    User.createUser = (data) => User.create({
-        user_id : data.user_id,
-        user_pw : data.user_pw,
-        user_name : data.user_name,
-        permission : data.permission,
-        user_email : data.user_email,
-        user_phone : data.user_phone,
-        school : data.school,
-        school_grade : data.school_grade,
-        school_class : data.school_class,
-        profile_pic : data.profile_pic,
-        isPublic : data.isPublic,
-        isAllowed : data.isAllowed,
-    })
 
     User.getUserForLogin = (user_id, user_pw) => User.findOne({
         where : {
@@ -163,5 +148,34 @@ module.exports = (sequelize, DataTypes) => {
         },
     });
     
+    User.createUser = (data) => User.create({
+        user_id : data.user_id,
+        user_pw : data.user_pw,
+        user_name : data.user_name,
+        permission : data.permission,
+        user_email : data.user_email,
+        user_phone : data.user_phone,
+        school : data.school,
+        school_grade : data.school_grade,
+        school_class : data.school_class,
+        profile_pic : data.profile_pic,
+        isPublic : data.isPublic,
+        isAllowed : data.isAllowed,
+    });
+
+    User.updateUser = (user_id, data) => User.update(data, {
+        where : {
+            user_id,
+        },
+    });
+
+    User.updateProfile = (user_id, profile_pic) => User.update({
+        profile_pic,
+    }, {
+        where : {
+            user_id,
+        }
+    });
+
     return User;
 }

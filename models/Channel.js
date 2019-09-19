@@ -32,13 +32,13 @@ module.exports = (sequelize, DataTypes) => {
             type : DataTypes.STRING(45),
             allowNull : false,
         },
-        is_public : {
-            field : 'isPublic',
+        isPublic : {
+            field : 'is_public',
             type : DataTypes.BOOLEAN,
             allowNull : false,
         },
-        created_at: {
-            field : 'createdAt',
+        createdAt: {
+            field : 'created_at',
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
             allowNull : false,
@@ -82,6 +82,14 @@ module.exports = (sequelize, DataTypes) => {
         raw : true,
     });
 
+    Channel.getChannelByNameAndSchool = (channel_name, school_id) => Channel.findAll({
+        where : {
+            name : { [models.Sequelize.Op.like] : '%' + channel_name + '%' },
+            school_id,
+        },
+        raw : true,
+    });
+
     Channel.getChannelByCreateUser = (create_user) => Channel.findAll({
         where : {
             create_user,
@@ -97,6 +105,13 @@ module.exports = (sequelize, DataTypes) => {
         raw : true,
     })
 
+    Channel.isFounder = (create_user, id) => Channel.findOne({
+        where : {
+            id,
+            create_user,
+        }
+    });
+
     Channel.createChannel = (data) => Channel.create({
         name : data.name,
         explain : data.explain,
@@ -104,7 +119,6 @@ module.exports = (sequelize, DataTypes) => {
         color : data.color,
         school_id : data.school_id,
         isPublic : data.isPublic,
-        createdAt : data.createdAt,
         thumbnail : data.thumbnail,
     });
 
@@ -118,6 +132,14 @@ module.exports = (sequelize, DataTypes) => {
         where : {
             id,
         },
+    });
+
+    Channel.updateThumbnail = (id, thumbnail) => Channel.update({
+        thumbnail,
+    }, {
+        where : {
+            id,
+        }
     });
 
     return Channel;

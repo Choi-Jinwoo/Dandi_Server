@@ -51,16 +51,31 @@ module.exports = (sequelize, DataTypes) => {
         });
     }
 
-    ChannelEvent.getChannelEvent = (id) => ChannelEvent.findOne({
+    ChannelEvent.getEvent = (id) => ChannelEvent.findOne({
         where : {
             id,
         },
         raw : true,
     });
 
-    ChannelEvent.getChannelEventByChannel = (channel_id) => ChannelEvent.findAll({
+    ChannelEvent.getEventByChannel = (channel_id) => ChannelEvent.findAll({
         where : {
             channel_id,
+        },
+        raw : true,
+    });
+    
+    ChannelEvent.getEventByChannelAndKeyword = (channel_id, kewword) => ChannelEvent.findAll({
+        where : {
+            name : { [models.Sequelize.Op.like] : '%' + kewword + '%' },
+            channel_id,
+        },
+        raw :true,
+    });
+
+    ChannelEvent.Channel = (id) => ChannelEvent.findOne({
+        where : {
+            id,
         },
         raw : true,
     });
@@ -85,5 +100,10 @@ module.exports = (sequelize, DataTypes) => {
         },
     });
 
+    ChannelEvent.deleteEventByChannel = (channel_id) => ChannelEvent.destroy({
+        where : {
+            channel_id,
+        },
+    })
     return ChannelEvent;
 }

@@ -17,13 +17,13 @@ module.exports = (sequelize, DataTypes) => {
             type : DataTypes.INTEGER(45),
             allowNull : false,
         },
-        is_allowed: { 
-            field: 'isAllowed',
+        isAllowed : { 
+            field: 'is_allowed',
             type: DataTypes.BOOLEAN,
             allowNull: false,
         },
-        push_notify: {
-            field: 'pushNotify',
+        pushNotify: {
+            field: 'push_notify',
             type : DataTypes.BOOLEAN,
             allowNull : false,
         },
@@ -61,9 +61,17 @@ module.exports = (sequelize, DataTypes) => {
             channel_id,
         },
         raw : true,
-    })
+    });
 
-    ChannelUser.createChannelUser = (data) => ChannelUser.create({
+    ChannelUser.awaitUser = (channel_id) => ChannelUser.findAll({
+        where : {
+            channel_id,
+            isAllowed : false,
+        },
+        raw : true,
+    });
+
+    ChannelUser.joinChannel = (data) => ChannelUser.create({
         user_id : data.user_id,
         channel_id : data.channel_id,
         isAllowed : data.isAllowed,
@@ -90,13 +98,14 @@ module.exports = (sequelize, DataTypes) => {
         where : {
             channel_id,
         }
-    })
+    });
 
     ChannelUser.leaveChannel = (user_id, channel_id) => ChannelUser.destroy({
         where : {
             user_id,
             channel_id,
         },
-    })
+    });
+    
     return ChannelUser;
 }
