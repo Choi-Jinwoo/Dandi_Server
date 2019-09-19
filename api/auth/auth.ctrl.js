@@ -35,7 +35,7 @@ exports.isOverlapped = async (req, res) => {
 exports.sendEmail = async (req, res) => {
 	colorConsole.green('[auth] 인증번호 발송')
 	const { user_email } = req.body;
-	const authCode = randomCode();
+	const authCode = randomCode(10);
 	
 	colorConsole.gray('<request>');
 	colorConsole.gray({ user_email });
@@ -82,7 +82,7 @@ exports.login = async (req, res) => {
 		
 		if (!userData) {
 			colorConsole.yellow('[auth] 비밀번호가 일치하지 않습니다.');
-			return res.status(400).json({ status : 400, message : '비밀번호가 일치하지 않습니다.' });
+			return res.status(405).json({ status : 405, message : '비밀번호가 일치하지 않습니다.' });
 		}
 		
 		if (!userData.isAllowed) {
