@@ -137,7 +137,7 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         where : {
             user_id,
-            isAllowed : true,
+            isAllowed : false,
         }
     });
 
@@ -159,6 +159,7 @@ module.exports = (sequelize, DataTypes) => {
         school_grade : data.school_grade,
         school_class : data.school_class,
         profile_pic : data.profile_pic,
+        pushNotify : data.pushNotify,
         isPublic : data.isPublic,
         isAllowed : data.isAllowed,
     });

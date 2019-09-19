@@ -34,6 +34,7 @@ exports.allowUser = async (req, res) => {
 	
 	colorConsole.gray('<request>');
 	colorConsole.gray({ allow_id });
+	const allowUser = await models.User.getUser(allow_id);
 	
 	if (!allow_id) {
 		colorConsole.yellow('검증 오류입니다.');
@@ -48,12 +49,12 @@ exports.allowUser = async (req, res) => {
 	try {
 		const allowInfo = await models.User.allowUser(allow_id);
 		
-		if (!allowInfo.legnth) {
+		if (!allowInfo[0]) {
 			colorConsole.yellow('[adminPage] 가입신청이 존재하지 않습니다.');
 			return res.status(400).json({ status : 400, message : '가입신청이 존재하지 않습니다.' });
 		}
-		
-		await sendEmail(allowInfo.user_email, '[단디] 회원가입이 승인되었습니다.', '[단디] 회원가입이 승인되었습니다.');
+
+		await sendEmail(allowUser.user_email, '[단디] 회원가입이 승인되었습니다.', '[단디] 회원가입이 승인되었습니다.');
 
 		return res.status(200).json({ status : 200, message : '회원가입 승인이 성공하였습니다.' });
 	} catch (err) {
@@ -74,6 +75,7 @@ exports.rejectUser = async (req, res) => {
     
     colorConsole.gray('<request>');
     colorConsole.gray({ reject_id });
+		const rejectUser = await models.User.getUser(reject_id);
 
     if (!reject_id) {
 			colorConsole.yellow('검증 오류입니다.');
@@ -88,12 +90,12 @@ exports.rejectUser = async (req, res) => {
     try {
 			const rejectInfo = await models.User.rejectUser(reject_id);
 			
-			if (!rejectInfo) {
+			if (!rejectInfo[0]) {
 				colorConsole.yellow('[adminPage] 가입신청이 존재하지 않습니다.');
 				return res.status(400).json({ status : 400, message : '가입신청이 존재하지 않습니다.' });
 			}
-
-			await sendEmail(rejectInfo.user_email, '[단디] 회원가입이 거절되었습니다.', '[단디] 회원가입이 거절되었습니다.');
+			
+			await sendEmail(rejectUser.user_email, '[단디] 회원가입이 거절되었습니다.', '[단디] 회원가입이 거절되었습니다.');
 			return res.status(200).json({ status : 200, message : '회원가입 거절이 완료되었습니다.' });
     } catch(err) {
 			if (err.status === 400) {
