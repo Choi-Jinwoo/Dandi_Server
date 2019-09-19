@@ -88,6 +88,7 @@ module.exports = (sequelize, DataTypes) => {
        start_date : data.start_date,
        end_date : data.end_date,
        author : data.author, 
+       content : data.content,
     });
 
     ChannelEvent.updateEvent = (id, data) => ChannelEvent.update(data, {
