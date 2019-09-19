@@ -4,7 +4,7 @@ const models = require('../../models');
 
 exports.awaitUser = async (req, res) => {
 	colorConsole.green('[adminPage] 승인대기 유저 조회');
-	const user = req.user;
+	const { user } = req;
 
 	if (user.permission !== 0) {
 		colorConsole.yellow('[adminPage] 조회 권한이 없습니다.');
@@ -29,7 +29,7 @@ exports.awaitUser = async (req, res) => {
 
 exports.allowUser = async (req, res) => {
 	colorConsole.green('[adminPage] 승인대기 유저 승인');
-	const user = req.user;
+	const { user } = req;
 	const { allow_id } = req.query; //querystring (user_id : allow user id)
 	
 	colorConsole.gray('<request>');
@@ -69,7 +69,7 @@ exports.allowUser = async (req, res) => {
 
 exports.rejectUser = async (req, res) => {
 	colorConsole.green('[adminPage] 승인대기 유저 거절');
-    const user = req.user;
+	const { user } = req;
     const { reject_id } = req.query; //querystring (user_id : reject user id)
     
     colorConsole.gray('<request>');

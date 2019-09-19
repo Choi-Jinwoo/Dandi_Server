@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
     const ChannelEvent = sequelize.define('ChannelEvent', {
         id: { 
@@ -67,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
     
     ChannelEvent.getEventByChannelAndKeyword = (channel_id, kewword) => ChannelEvent.findAll({
         where : {
-            name : { [models.Sequelize.Op.like] : '%' + kewword + '%' },
+            title : { [Sequelize.Op.like] : '%' + kewword + '%' },
             channel_id,
         },
         raw :true,

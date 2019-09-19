@@ -4,7 +4,7 @@ const Validation = require('../../lib/validation');
 
 exports.getChannelEvent = async (req, res) => {
 	colorConsole.green('[channelEvent] 일정 조회');
-	const user = req.user;
+	const { user } = req;
 	const { channel_id } = req.query; //querystring (channel_id : get events channel)
 	
 	colorConsole.gray('<request>');
@@ -20,10 +20,10 @@ exports.getChannelEvent = async (req, res) => {
 			colorConsole.yellow('[channelEvent] 일정 조회 권한이 없습니다.')
 			return res.status(403).json({ status : 403, message : '일정 조회 권한이 없습니다.' });
 		}
-
+		
 		const events = await models.ChannelEvent.getEventByChannel(channel_id);
 		
-		for (let i = 0; i < events.legnth; i++) {
+		for (let i = 0; i < events.length; i++) {
 			const userInfo = await models.User.getUser(events[i].author);
 			events[i].author = {
 				user_id : userInfo.user_id,
@@ -43,7 +43,7 @@ exports.getChannelEvent = async (req, res) => {
 
 exports.addEvent = async (req, res) => {
 	colorConsole.green('[channelEvent] 일정 추가');
-	const user = req.user;
+	const { user } = req;
 	const { channel_id } = req.query; //querystring(channel_id : event channel_id)
 	const { body } = req;
 	body.author = user.user_id;
@@ -79,7 +79,7 @@ exports.addEvent = async (req, res) => {
 
 exports.deleteEvent = async (req, res) => {
 	colorConsole.green('[channelEvent] 일정 삭제')
-	const user = req.user;
+	const { user } = req;
 	const { event_id }  = req.query; //querystring (event_id : delete event_id)
 	
 	colorConsole.gray('<request>');
@@ -114,7 +114,7 @@ exports.deleteEvent = async (req, res) => {
 
 exports.searchEvent = async (req, res) => {
 	colorConsole.green('[channelEvent] 일정 검색')
-	const user = req.user;
+	const { user } = req;
 	const { channel_id, keyword } = req.query //querystring (channel_id : search channel_id, keyword : search keyword)
 	
 	colorConsole.gray('<request>');
@@ -131,21 +131,21 @@ exports.searchEvent = async (req, res) => {
 			return res.status(403).json({ status : 403, message : '일정 검색 권한이 없습니다.' });
 		}
 
-		const events = await ChannelEvent.getEventByChannelAndKeyword(channel_id, keyword);
+		const events = await models.ChannelEvent.getEventByChannelAndKeyword(channel_id, keyword);
 
 		if (!events.length) {
 			colorConsole.yellow('[channelEvent] 검색 결과가 존재하지 않습니다.');
 			return res.status(400).json({ status : 400, message : '검색 결과가 존재하지 않습니다.' });
 		}
-		
-		for (let i = 0; i < events.legnth; i++) {
+
+		for (let i = 0; i < events.length; i++) {
 			const userInfo = await models.User.getUser(events[i].author);
 			events[i].author = {
 				user_id : userInfo.user_id,
-				user_name : userInfo.user_name,
+				user_name : userInfo.user_name, //for문이 안돔
 			}
 		}
-
+		
 		colorConsole.gray('<response>');
 		colorConsole.gray({ events });
 		
@@ -158,7 +158,7 @@ exports.searchEvent = async (req, res) => {
 
 exports.updateEvent = async (req, res) => {
 	colorConsole.green('[channelEvent] 일정 변경');
-	const user = req.user;
+	const { user } = req;
 	const { event_id } = req.query; //querystirng(event_id : update event id)
 	const { body } = req;
 	body.author = user.user_id;
@@ -171,7 +171,7 @@ exports.updateEvent = async (req, res) => {
 			colorConsole.yellow('검증 오류입니다.');
 			return res.status(400).json({ status : 400, message : '검증 오류입니다.' });
 		}
-		Validation.validateUpdateEvent(body);	
+		await Validation.validateUpdateEvent(body);	
 	} catch(err) {
 		colorConsole.yellow('검증 오류입니다.');
 		return res.status(400).json({ status : 400, message : '검증 오류입니다.' });

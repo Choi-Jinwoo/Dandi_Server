@@ -4,7 +4,7 @@ const Validation = require('../../lib/validation');
 
 exports.createChannel = async (req, res) => {
 	colorConsole.green('[channelAdmin] 개설 채널 조회');
-	const user = req.user;
+	const { user } = req;
 	try {
 		const createChannels = await models.Channel.getChannelByCreateUser(user.user_id);
 		
@@ -25,7 +25,7 @@ exports.createChannel = async (req, res) => {
 
 exports.awaitUser = async (req, res) => {
 	colorConsole.green('[channelAdmin] 승인대기 유저 조회');
-	const user = req.user;
+	const { user } = req;
 	const { channel_id } = req.query; //querystring (channel_id : request channel id)
 	
 	colorConsole.gray('<request>');
@@ -61,7 +61,7 @@ exports.awaitUser = async (req, res) => {
 
 exports.allowUser = async (req, res) => {
 	colorConsole.green('[channelAdmin] 승인대기 유저 승인');
-	const user = req.user;
+	const { user } = req;
 	const { channel_id, user_id } = req.query; //querystring ( channel_id : request channel, user_id : allow user id)
 
 	colorConsole.gray('<request>');
@@ -89,7 +89,7 @@ exports.allowUser = async (req, res) => {
 
 exports.rejectUser = async (req, res) => {
 	colorConsole('[channelAdmin] 승인대기 유저 거절');
-	const user = req.user;
+	const { user } = req;
 	const { channel_id, user_id } = req.query; //querystring (channel_id : request channel, user_id : reject user id)
 	
 	colorConsole.gray('<request>');
@@ -117,7 +117,7 @@ exports.rejectUser = async (req, res) => {
 
 exports.updateChannel = async (req, res) => {
 	colorConsole.green('[channel] 채널 정보 변경');
-	const user = req.user;
+	const { user } = req;
 	const { channel_id } = req.query; //querystirng (channel_id : update channel id)
 	const { body } = req;
 

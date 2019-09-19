@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
     const Channel = sequelize.define('Channel', {
         id : { 
@@ -84,7 +86,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Channel.getChannelByNameAndSchool = (channel_name, school_id) => Channel.findAll({
         where : {
-            name : { [models.Sequelize.Op.like] : '%' + channel_name + '%' },
+            name : { [Sequelize.Op.like] : '%' + channel_name + '%' },
             school_id,
         },
         raw : true,

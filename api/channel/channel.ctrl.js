@@ -59,7 +59,7 @@ exports.addChannel = async (req, res) => {
 
 exports.deleteChannel = async (req, res) => {
 	colorConsole.green('[channel] 채널 삭제');
-	const user = req.user;
+	const { user } = req;
 	const { channel_id } = req.query; //querystring (channel_id : delete channel id)
 	
 	colorConsole.gray('<request>');
@@ -95,7 +95,7 @@ exports.deleteChannel = async (req, res) => {
 
 exports.joinChannel = async (req, res) => {
 	colorConsole.green('[channel] 채널 가입');
-	const user = req.user;
+	const { user } = req;
 	const { channel_id } = req.query; //querystring (channel_id : join channel id)
 	
 	colorConsole.gray('<request>');
@@ -133,7 +133,7 @@ exports.joinChannel = async (req, res) => {
 
 exports.leaveChannel = async (req, res) => {
 	colorConsole.green('[channel] 채널 탈퇴');
-	const user = req.user;
+	const { user } = req;
 	const { channel_id } = req.query; //querystring (channel_id : leave channel id)
 	
 	colorConsole.gray('<request>');
@@ -173,7 +173,7 @@ exports.leaveChannel = async (req, res) => {
 
 exports.searchChannel = async (req, res) => {
 	colorConsole.green('[channel] 채널 검색');
-	const user = req.user;
+	const { user } = req;
 	const { channel_name } = req.query; //querystring (channel_name : search channel name)
 
 	colorConsole.gray('<request>');
@@ -241,7 +241,7 @@ exports.channelInfo = async (req, res) => {
 
 exports.checkChannel = async (req, res) => {
 	colorConsole.green('[channel] 가입 채널 조회');
-	const user = req.user;
+	const { user } = req;
 
 	try {
 		const joinedChannel = await models.ChannelUser.getChannelUserByUser(user.user_id);
