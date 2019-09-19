@@ -103,6 +103,27 @@ module.exports = (sequelize, DataTypes) => {
         raw : true,
     });
 
+    User.getAllowedUser = () => User.findAll({
+        attributes : [
+            'user_id',
+            'user_name',
+            'permission',
+            'user_email',
+            'user_phone',
+            'school',
+            'school_grade',
+            'school_class',
+            'profile_pic',
+            'pushNotify',
+            'isPublic',
+            'isAllowed',
+        ],
+        where : {
+            isAllowed : true,
+        },
+        raw : true,
+    });
+
     User.getUserForLogin = (user_id, user_pw) => User.findOne({
         where : {
             user_id,

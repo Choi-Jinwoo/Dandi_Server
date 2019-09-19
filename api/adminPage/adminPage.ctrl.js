@@ -2,6 +2,29 @@ const sendEmail = require('../../lib/sendEmail');
 const colorConsole = require('../../lib/console');
 const models = require('../../models');
 
+exports.userData = async (req, res) => {
+	colorConsole.green('[adminPage] 가입 유저 조회');
+	const { user } = req;
+
+	if (user.permission !== 0) {
+		colorConsole.yellow('[adminPage] 조회 권한이 없습니다.');
+		return res.status(403).json({ status : 403, message : '조회 권한이 없습니다.' });
+	}
+	try {
+		const userData = await models.User.getAllowedUser();
+
+		if (!userData.length) {
+			colorConsole.yellow('[adminPage] 가입된 유저가 없습니다.');
+			return res.status(400).json({ status : 400, message : '가입된 유저가 없습니다.' });
+		}
+	
+		return res.status(200).json({ status : 200, message : '가입된 유저 조회에 성공하였습니다.', data : { userData } });
+	} catch(err) {
+		colorConsole.red(err.message);
+		return res.status(500).json({ status : 500, message : '가입된 유저 조회에 실패하였습니다.' });
+	}
+}
+
 exports.awaitUser = async (req, res) => {
 	colorConsole.green('[adminPage] 승인대기 유저 조회');
 	const { user } = req;
