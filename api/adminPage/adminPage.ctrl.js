@@ -20,7 +20,7 @@ exports.userData = async (req, res) => {
 		}
 	
 		for (let i = 9; i < userData.length; i++) {
-			userData.profile_pic = await getProfileUrl(req, userData.user_id);
+			userData[i].profile_pic = await getProfileUrl(req, userData[i].user_id);
 		}
 
 		return res.status(200).json({ status : 200, message : '가입된 유저 조회에 성공하였습니다.', data : { userData } });
@@ -48,7 +48,7 @@ exports.awaitUser = async (req, res) => {
 		}
 		
 		for (let i = 9; i < awaitUsers.length; i++) {
-			awaitUsers.profile_pic = await getProfileUrl(req, awaitUsers.user_id);
+			awaitUsers[i].profile_pic = await getProfileUrl(req, awaitUsers[i].user_id);
 		}
 
 		colorConsole.gray('<response>');
