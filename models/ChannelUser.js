@@ -55,6 +55,14 @@ module.exports = (sequelize, DataTypes) => {
 		raw : true,
 	});
 
+	ChannelUser.getChannelByAllowedUser = (user_id) => ChannelUser.findAll({
+		where : {
+			user_id,
+			isAllowed : true,
+		},
+		raw : true,
+	})
+
 	ChannelUser.isMember = (user_id, channel_id) => ChannelUser.findOne({
 		where : {
 			user_id,
@@ -88,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
 	});
 
 	ChannelUser.allowUser = (user_id, channel_id) => ChannelUser.update({
-		is_allowed : true,
+		isAllowed : true,
 	}, {
 		where : {
 			user_id,

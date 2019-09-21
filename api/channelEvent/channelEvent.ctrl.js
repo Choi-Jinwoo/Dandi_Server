@@ -11,18 +11,21 @@ exports.getChannelEvent = async (req, res) => {
 	colorConsole.gray('<request>');
 	colorConsole.gray({ channel_id });
 
-	if (!channel_id) {
-		colorConsole.yellow('검증 오류입니다.');
-		return res.status(400).json({ status : 400, message : '검증 오류입니다.' });
-	}
-
 	try {
-		if (!await models.ChannelUser.isMember(user.user_id, channel_id)) {
-			colorConsole.yellow('[channelEvent] 일정 조회 권한이 없습니다.')
-			return res.status(403).json({ status : 403, message : '일정 조회 권한이 없습니다.' });
+		let events;
+		if (!channel_id) {
+			const joinedChannel = await models.ChannelUser.getChannelByAllowedUser(user.user_id);
+			
+			for (let i = 0; i < joinedChannel.length; i++) {
+				events = await models.ChannelEvent.getEventByChannel(joinedChannel[i].channel_id);
+			}
+		} else {
+			if (!await models.ChannelUser.isMember(user.user_id, channel_id)) {
+				colorConsole.yellow('[channelEvent] 일정 조회 권한이 없습니다.')
+				return res.status(403).json({ status : 403, message : '일정 조회 권한이 없습니다.' });
+			}
+			events = await models.ChannelEvent.getEventByChannel(channel_id);
 		}
-		
-		const events = await models.ChannelEvent.getEventByChannel(channel_id);
 		
 		for (let i = 0; i < events.length; i++) {
 			const userInfo = await models.User.getUser(events[i].author);
@@ -34,6 +37,7 @@ exports.getChannelEvent = async (req, res) => {
 				user_id : userInfo.user_id,
 				user_name : userInfo.user_name,
 			}
+			delete events[i].channel_id;
 		}
 
 		colorConsole.gray('<response>');
@@ -154,6 +158,7 @@ exports.searchEvent = async (req, res) => {
 				user_id : userInfo.user_id,
 				user_name : userInfo.user_name,
 			}
+			delete events[i].channel_id;
 		}
 		
 		colorConsole.gray('<response>');
