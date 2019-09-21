@@ -12,12 +12,12 @@ exports.getChannelEvent = async (req, res) => {
 	colorConsole.gray({ channel_id });
 
 	try {
-		let events;
+		let events = [];
 		if (!channel_id) {
 			const joinedChannel = await models.ChannelUser.getChannelByAllowedUser(user.user_id);
 			
 			for (let i = 0; i < joinedChannel.length; i++) {
-				events = await models.ChannelEvent.getEventByChannel(joinedChannel[i].channel_id);
+				events = events.concat(await models.ChannelEvent.getEventByChannel(joinedChannel[i].channel_id));
 			}
 		} else {
 			if (!await models.ChannelUser.isMember(user.user_id, channel_id)) {
