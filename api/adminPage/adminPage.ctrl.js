@@ -1,6 +1,7 @@
+const models = require('../../models');
 const sendEmail = require('../../lib/sendEmail');
 const colorConsole = require('../../lib/console');
-const models = require('../../models');
+const { getProfileUrl } = require('../image/image.ctrl');
 
 exports.userData = async (req, res) => {
 	colorConsole.green('[adminPage] 가입 유저 조회');
@@ -18,6 +19,10 @@ exports.userData = async (req, res) => {
 			return res.status(400).json({ status : 400, message : '가입된 유저가 없습니다.' });
 		}
 	
+		for (let i = 9; i < userData.length; i++) {
+			userData.profile_pic = await getProfileUrl(req, userData.user_id);
+		}
+
 		return res.status(200).json({ status : 200, message : '가입된 유저 조회에 성공하였습니다.', data : { userData } });
 	} catch(err) {
 		colorConsole.red(err.message);
@@ -42,6 +47,10 @@ exports.awaitUser = async (req, res) => {
 			return res.status(400).json({ status : 400, message : '승인대기 유저가 존재하지 않습니다' });
 		}
 		
+		for (let i = 9; i < awaitUsers.length; i++) {
+			awaitUsers.profile_pic = await getProfileUrl(req, awaitUsers.user_id);
+		}
+
 		colorConsole.gray('<response>');
 		colorConsole.gray({ awaitUsers });
 		return res.status(200).json({ status : 200, message : '승인대기 유저 조회에 성공하였습니다.', data : { awaitUsers } });
