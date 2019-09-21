@@ -28,9 +28,8 @@ exports.getChannelEvent = async (req, res) => {
 			const userInfo = await models.User.getUser(events[i].author);
 			const channelInfo = await models.Channel.getChannel(events[i].channel_id);
 			channelInfo.thumbnail = await getThumbnailUrl(req, events[i].channel_id);
-
+			
 			events[i].channel = channelInfo;
-
 			events[i].author = {
 				user_id : userInfo.user_id,
 				user_name : userInfo.user_name,
@@ -52,6 +51,7 @@ exports.addEvent = async (req, res) => {
 	const { user } = req;
 	const { channel_id } = req.query; //querystring(channel_id : event channel_id)
 	const { body } = req;
+
 	body.author = user.user_id;
 	body.channel_id = channel_id;
 	
@@ -152,7 +152,7 @@ exports.searchEvent = async (req, res) => {
 			events[i].channel = channelInfo;
 			events[i].author = {
 				user_id : userInfo.user_id,
-				user_name : userInfo.user_name, //for문이 안돔
+				user_name : userInfo.user_name,
 			}
 		}
 		
@@ -173,7 +173,7 @@ exports.updateEvent = async (req, res) => {
 	const { body } = req;
 	body.author = user.user_id;
 	
-	colorConsole.gray('request');
+	colorConsole.gray('<request>');
 	colorConsole.gray({ event_id, body });
 
 	try {

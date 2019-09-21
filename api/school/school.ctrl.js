@@ -68,28 +68,27 @@ exports.searchById = async (school_id) => {
 				return reject(err);
 			}
 	
-		_schoolInfo = JSON.parse(_schoolInfo);
+			_schoolInfo = JSON.parse(_schoolInfo);
 	
-		if(_schoolInfo.RESULT !== undefined) {
-			if (_schoolInfo.RESULT.CODE === 'INFO-200') { //no school info
-				return reject({
-					status : 404,
-					message : '학교 정보가 존재하지 않습니다.'
-				});
+			if(_schoolInfo.RESULT !== undefined) {
+				if (_schoolInfo.RESULT.CODE === 'INFO-200') { //no school info
+					return reject({
+						status : 404,
+						message : '학교 정보가 존재하지 않습니다.'
+					});
+				}
 			}
-		}
-		
-		_schoolInfo = {
-			school_name : _schoolInfo.schoolInfo[1].row[0].SCHUL_NM,
-			school_locate : _schoolInfo.schoolInfo[1].row[0].ORG_RDNMA,
-			office_code : _schoolInfo.schoolInfo[1].row[0].ATPT_OFCDC_SC_CODE,
-			school_code : _schoolInfo.schoolInfo[1].row[0].SD_SCHUL_CODE,
-			school_type : _schoolInfo.schoolInfo[1].row[0].SCHUL_KND_SC_NM,
-		}
-		
-		schoolInfo = _schoolInfo;
+			
+			_schoolInfo = {
+				school_name : _schoolInfo.schoolInfo[1].row[0].SCHUL_NM,
+				school_locate : _schoolInfo.schoolInfo[1].row[0].ORG_RDNMA,
+				office_code : _schoolInfo.schoolInfo[1].row[0].ATPT_OFCDC_SC_CODE,
+				school_code : _schoolInfo.schoolInfo[1].row[0].SD_SCHUL_CODE,
+				school_type : _schoolInfo.schoolInfo[1].row[0].SCHUL_KND_SC_NM,
+			}
+			
+			schoolInfo = _schoolInfo;
 		});
-	
 		return resolve(schoolInfo);
 	});
 }
@@ -166,7 +165,7 @@ exports.schoolEvent = async (req, res) => {
 				events[i] = { title, start_date, end_date }
 			}
 			
-			colorConsole.gray('response');
+			colorConsole.gray('<response>');
 			colorConsole.gray({ events });
 
 			return res.status(200).json({ status : 200, message : '학사일정 조회에 성공하였습니다.', data : { events } });
@@ -209,7 +208,7 @@ exports.classInfo = async (req, res) => {
 			}
 			const classCount = classInfo.classInfo[0].head[0].list_total_count;
 			
-			colorConsole.gray('response');
+			colorConsole.gray('<response>');
 			colorConsole.gray({ classCount });
 
 			return res.status(200).json({ status : 200, message : '학년 정보 조회에 성공하였습니다.', data : { classCount } });

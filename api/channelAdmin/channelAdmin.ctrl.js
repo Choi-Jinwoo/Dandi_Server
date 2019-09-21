@@ -121,7 +121,6 @@ exports.updateChannel = async (req, res) => {
 	const { channel_id } = req.query; //querystirng (channel_id : update channel id)
 	const { body } = req;
 
-	
 	colorConsole.gray('request');
 	colorConsole.gray({ channel_id, body });
 	

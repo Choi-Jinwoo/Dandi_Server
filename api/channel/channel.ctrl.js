@@ -83,9 +83,9 @@ exports.deleteChannel = async (req, res) => {
 			return res.status(403).json({ status : 403, message : '삭제 권한이 없습니다.'});
 		}
 
-		await models.ChannelUser.deleteChannelUserByChannel(channel_id);
-		await models.Channel.deleteChannel(channel_id);
-		await models.ChannelEvent.deleteEventByChannel(channel_id);
+		await models.ChannelUser.deleteChannelUserByChannel(channel_id); //채널 유저 삭제
+		await models.ChannelEvent.deleteEventByChannel(channel_id); //채널 이벤트 삭제
+		await models.Channel.deleteChannel(channel_id);  //채널 삭제
 		return res.status(200).json({ status : 200, message : '채널 삭제에 성공하였습니다.' });
 	} catch (err) {
 		colorConsole.red(err.message);

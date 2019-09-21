@@ -33,7 +33,7 @@ exports.isOverlapped = async (req, res) => {
 }
 
 exports.sendEmail = async (req, res) => {
-	colorConsole.green('[auth] 인증번호 발송')
+	colorConsole.green('[auth] 인증번호 발송');
 	const { user_email } = req.body;
 	const authCode = randomCode(10);
 	
@@ -101,8 +101,8 @@ exports.login = async (req, res) => {
 
 exports.signUp = async (req, res) => {
 	colorConsole.green('[auth] 회원가입');
-
 	const { body } = req;
+	
 	body.permission = 1; //set permission(member)
 	body.isAllowed = false;
 	

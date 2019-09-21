@@ -41,6 +41,7 @@ exports.awaitUser = async (req, res) => {
 			colorConsole.yellow('[adminPage] 승인대기 유저가 존재하지 않습니다');
 			return res.status(400).json({ status : 400, message : '승인대기 유저가 존재하지 않습니다' });
 		}
+		
 		colorConsole.gray('<response>');
 		colorConsole.gray({ awaitUsers });
 		return res.status(200).json({ status : 200, message : '승인대기 유저 조회에 성공하였습니다.', data : { awaitUsers } });
