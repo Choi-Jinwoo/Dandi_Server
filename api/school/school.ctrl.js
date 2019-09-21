@@ -138,18 +138,27 @@ exports.schoolEvent = async (req, res) => {
 		return res.status(400).json({ status : 400, message : '검증 오류입니다.' });
 	}
 
-	try {
-		const schoolInfo = await exports.searchById(user.school);
-		const key = neisInfo.key;
-		const url = `http://open.neis.go.kr/hub/SchoolSchedule?ATPT_OFCDC_SC_CODE=${schoolInfo.office_code}&SD_SCHUL_CODE=${user.school}&AA_YMD=${year}${month}&key=${key}&type=json`;
-		
-		await request(url, (err, response, schoolEvent) => {
+	const schoolInfo = await exports.searchById(user.school);
+	const key = neisInfo.key;
+	const url = `http://open.neis.go.kr/hub/SchoolSchedule?ATPT_OFCDC_SC_CODE=${schoolInfo.office_code}&SD_SCHUL_CODE=${user.school}&AA_YMD=${year}${month}&key=${key}&type=json`;
+	
+	await request(url, (err, response, schoolEvent) => {
+		try {
 			if (err) {
 				colorConsole.red(err.message);
 				return res.status(500).json({ status : 500, message : '학사일정 조회에 실패하였습니다.' });
 			}
 			
+			
 			schoolEvent = JSON.parse(schoolEvent);
+
+			if(schoolEvent.RESULT !== undefined) {
+				if (schoolEvent.RESULT.CODE === 'INFO-200') { //no class info
+					colorConsole.yellow('[school] 학사일정이 존재하지 않습니다.');
+					return res.status(404).json({ status : 404, message : '학사일정이 존재하지 않습니다.' });
+				}
+			}
+
 			const eventCount = schoolEvent.SchoolSchedule[0].head[0].list_total_count;
 			
 			let events = [];
@@ -169,11 +178,11 @@ exports.schoolEvent = async (req, res) => {
 			colorConsole.gray({ events });
 
 			return res.status(200).json({ status : 200, message : '학사일정 조회에 성공하였습니다.', data : { events } });
-		})
-	} catch (err) {
-		colorConsole.red(err.message);
-		return res.status(500).json({ status : 500, message : '학사일정 조회에 실패하였습니다.' });
-	}
+		} catch (err) {
+			colorConsole.red(err.message);
+			return res.status(500).json({ status : 500, message : '학사일정 조회에 실패하였습니다.' });
+		}
+	})
 }
 
 exports.classInfo = async (req, res) => {
