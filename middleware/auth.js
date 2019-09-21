@@ -7,7 +7,6 @@ const models = require('../models');
  * @param {express.Request} req
  */
 module.exports = async (req, res, next) => {
-    //const { token } = req.headers;
     const token = req.headers['x-access-token'];
     if (!token) {
         return res.status(400).json({ status : 400, message : '토큰이 전송되지 않았습니다.' });
@@ -36,7 +35,7 @@ module.exports = async (req, res, next) => {
             case 'invalid signature':
                 return res.status(401).json({ status : 401, message : '위조된 토큰입니다.' });
             case 'jwt expired':
-                return res.status(400).json({ status : 400, message : '토큰이 만료되었습니다.' });
+                return res.status(410).json({ status : 410, message : '토큰이 만료되었습니다.' });
             default:
                 colorConsole.red(err.message);
                 return res.status(500).json({ status : 500, message : '다시 시도해 주세요.' });              

@@ -7,9 +7,10 @@ const colorConsole = require('./lib/console');
 const app = express();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended : false}));
+app.use(bodyParser.urlencoded({ extended : false }));
 app.use(cors());
 app.use(origin);
+
 app.use('/static', express.static(__dirname + '/public'));
 app.use('/auth', require('./api/auth'));
 app.use('/admin-page', require('./api/adminPage'));
