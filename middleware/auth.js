@@ -24,7 +24,7 @@ module.exports = async (req, res, next) => {
 			return res.status(404).json({ status : 404, message : '유저 정보가 존재하지 않습니다.' });
 		}
 		
-		req = { user };
+		req.user = user;
 		next();
 	} catch(err) {
 		switch (err.message) {
