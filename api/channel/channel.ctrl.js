@@ -254,7 +254,7 @@ exports.checkChannel = async (req, res) => {
 	const { user } = req;
 
 	try {
-		const joinedChannel = await models.ChannelUser.getChannelUserByUser(user.user_id);
+		const joinedChannel = await models.ChannelUser.getChannelByAllowedUser(user.user_id);
 		
 		if (!joinedChannel.length) {
 			colorConsole.yellow('[channel] 가입 채널이 존재하지 않습니다.');
