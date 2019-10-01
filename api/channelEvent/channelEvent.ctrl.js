@@ -28,7 +28,7 @@ exports.getChannelEvent = async (req, res) => {
 		}
 		
 		for (let i = 0; i < events.length; i++) {
-			const userInfo = await models.User.getUser(events[i].author);
+			const userInfo = await models.User.getUserData(events[i].author);
 			const channelInfo = await models.Channel.getChannel(events[i].channel_id);
 			channelInfo.thumbnail = await getThumbnailUrl(req, events[i].channel_id);
 			
@@ -149,7 +149,7 @@ exports.searchEvent = async (req, res) => {
 		}
 
 		for (let i = 0; i < events.length; i++) {
-			const userInfo = await models.User.getUser(events[i].author);
+			const userInfo = await models.User.getUserData(events[i].author);
 			const channelInfo = await models.Channel.getChannel(events[i].channel_id);
 			channelInfo.thumbnail = await getThumbnailUrl(req, events[i].channel_id);
 

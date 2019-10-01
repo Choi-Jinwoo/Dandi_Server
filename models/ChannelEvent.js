@@ -107,6 +107,7 @@ module.exports = (sequelize, DataTypes) => {
 		where : {
 			channel_id,
 		},
-	})
+	});
+	
 	return ChannelEvent;
 }

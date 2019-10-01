@@ -53,12 +53,12 @@ exports.getProfile = async (req, res) => {
 			
 				if (userInfo.school.school_code !== user.school) {
 					colorConsole.yellow('[profile] 다른 학교 유저입니다.');
-					return res.status(400).json({ status : 400, message : '다른 학교 유저입니다.' });
+					return res.status(403).json({ status : 403, message : '다른 학교 유저입니다.' });
 				}
 				
 				if (!userInfo.isPublic) {
-					colorConsole.yellow('[profile] 비공개 유저입니다.');
-					return res.status(400).json({ status : 400, message : '비공개 유저입니다.' });
+					delete userInfo.user_phone;
+					delete userInfo.user_email;
 				}
 		
 				colorConsole.gray('<response>');

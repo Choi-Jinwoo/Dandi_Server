@@ -44,7 +44,7 @@ exports.addChannel = async (req, res) => {
 			pushNotify : false,
 		});
 
-		return res.status(200).json({ status : 200, message : '채널 개설에 성공하였습니다.', data : { channel_id : createdChannel.id } });
+		return res.status(200).json({ status : 200, message : '채널 개설에 성공하였습니다.', data : { createdChannel } });
 	} catch(err) {
 		try {
 			await models.Channel.deleteChannel(createdChannel.id);
@@ -226,7 +226,7 @@ exports.channelInfo = async (req, res) => {
     colorConsole.gray({ channel_id });
 
 		if (!channel_id) {
-			colorConsole('[channel] 검증 오류입니다.');
+			colorConsole.yellow('[channel] 검증 오류입니다.');
 			return res.status(400).json({ status : 400, message : '검증 오류입니다.' });
 		}
 		
@@ -239,6 +239,11 @@ exports.channelInfo = async (req, res) => {
 			}
 			
 			channelInfo.thumbnail = await getThumbnailUrl(req, channel_id);
+			channelInfo.users = await models.ChannelUser.getChannelUserByChannel(channel_id);
+
+			for (let i = 0; i < channelInfo.users.length; i++) {
+				channelInfo.users[i] = await models.User.getUserData(channelInfo.users[i].user_id);
+			}
 
 			colorConsole.gray('<response>');
 			colorConsole.gray({ channelInfo });
