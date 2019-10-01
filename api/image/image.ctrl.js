@@ -1,11 +1,30 @@
 const models = require('../../models');
 const colorConsole = require('../../lib/console');
 const imageInfo = require('../../config/imageInfo');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+			cb(null, './public/image/');
+	},
+	filename: (req, file, cb) => {
+			cb(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
+	},
+});
+
+const upload = multer({ storage });
 
 exports.uploadProfile = async (req, res) => {
 	colorConsole.green('[image] 프로필 이미지 업로드');
 	const { user } = req;
 	
+	try {
+		upload.single('profile_pic');
+	} catch(err) {
+		colorConsole.yellow('검증 오류입니다.');
+		return res.status(400).json({ status : 400, message : '검증 오류입니다.' });
+	}
+
 	colorConsole.gray('<request>');
 	colorConsole.gray({ file : req.file });
 
