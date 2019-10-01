@@ -20,6 +20,7 @@ app.use('/school', require('./api/school'));
 app.use('/channel-event', require('./api/channelEvent'));
 app.use('/profile', require('./api/profile'));
 app.use('/image' , require('./api/image'));
+app.use('/weblog', require('./webLog'));
 
 //get api docs
 app.get('/api', (req, res) => {
