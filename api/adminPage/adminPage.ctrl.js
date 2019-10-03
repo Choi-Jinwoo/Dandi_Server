@@ -1,5 +1,5 @@
 const models = require('../../models');
-const sendEmail = require('../../lib/sendEmail');
+const email = require('../../lib/email');
 const colorConsole = require('../../lib/console');
 const { getProfileUrl } = require('../image/image.ctrl');
 
@@ -67,12 +67,13 @@ exports.allowUser = async (req, res) => {
 	
 	colorConsole.gray('<request>');
 	colorConsole.gray({ allow_id });
-	const allowUser = await models.User.getUser(allow_id);
-	
+
 	if (!allow_id) {
 		colorConsole.yellow('검증 오류입니다.');
 		return res.status(400).json({ status : 400, message : '검증 오류입니다' });
 	}
+
+	const allowUser = await models.User.getUser(allow_id);
 	
 	if (user.permission !== 0) {
 		colorConsole.yellow('[adminPage] 승인 권한이 없습니다.');
@@ -87,7 +88,7 @@ exports.allowUser = async (req, res) => {
 			return res.status(400).json({ status : 400, message : '가입신청이 존재하지 않습니다.' });
 		}
 
-		await sendEmail(allowUser.user_email, '[단디] 회원가입이 승인되었습니다.', '[단디] 회원가입이 승인되었습니다.');
+		await email.sendEmail(allowUser.user_email, '[단디] 회원가입이 승인되었습니다.', email.allowForm());
 
 		return res.status(200).json({ status : 200, message : '회원가입 승인이 성공하였습니다.' });
 	} catch (err) {
@@ -108,27 +109,28 @@ exports.rejectUser = async (req, res) => {
     
     colorConsole.gray('<request>');
     colorConsole.gray({ reject_id });
-		const rejectUser = await models.User.getUser(reject_id);
-
-    if (!reject_id) {
+		
+		if (!reject_id) {
 			colorConsole.yellow('검증 오류입니다.');
 			return res.status(400).json({ status : 400, message : '검증 오류입니다' });
-    }
-
+		}
+		
+		const rejectUser = await models.User.getUser(reject_id);
+		
     if (user.permission !== 0) {
 			colorConsole.yellow('[adminPage] 거절 권한이 없습니다.');
 			return res.status(403).json({ status : 403, message : '거절 권한이 없습니다.' });
     }
-    
+		
+		if (!rejectUser) {
+			colorConsole.yellow('[adminPage] 가입신청이 존재하지 않습니다.');
+			return res.status(400).json({ status : 400, message : '가입신청이 존재하지 않습니다.' });
+		}
+
     try {
-			const rejectInfo = await models.User.rejectUser(reject_id);
+			await models.User.rejectUser(reject_id);
 			
-			if (!rejectInfo[0]) {
-				colorConsole.yellow('[adminPage] 가입신청이 존재하지 않습니다.');
-				return res.status(400).json({ status : 400, message : '가입신청이 존재하지 않습니다.' });
-			}
-			
-			await sendEmail(rejectUser.user_email, '[단디] 회원가입이 거절되었습니다.', '[단디] 회원가입이 거절되었습니다.');
+			await email.sendEmail(rejectUser.user_email, '[단디] 회원가입이 거절되었습니다.', email.rejectForm());
 			return res.status(200).json({ status : 200, message : '회원가입 거절이 완료되었습니다.' });
     } catch(err) {
 			if (err.status === 400) {

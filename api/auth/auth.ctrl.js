@@ -2,7 +2,7 @@ const models = require('../../models');
 const Validation = require('../../lib/validation');
 const tokenLib = require('../../lib/token');
 const randomCode = require('../../lib/randomCode');
-const sendEmail = require('../../lib/sendEmail');
+const email = require('../../lib/email');
 const colorConsole = require('../../lib/console');
 
 exports.isOverlapped = async (req, res) => {
@@ -32,7 +32,7 @@ exports.isOverlapped = async (req, res) => {
 	}
 }
 
-exports.sendEmail = async (req, res) => {
+exports.emailAuth = async (req, res) => {
 	colorConsole.green('[auth] 인증번호 발송');
 	const { user_email } = req.body;
 	const authCode = randomCode(6);
@@ -46,7 +46,7 @@ exports.sendEmail = async (req, res) => {
 	}
 
 	try {
-		await sendEmail(user_email, '[단디] 인증번호', authCode);
+		await email.sendEmail(user_email, '[단디] 인증번호', email.authForm(authCode));
 		return res.status(200).json({ status : 200, message : '인증번호 발송에 성공하였습니다.', data : { authCode } });
 	} catch(err) {
 		if (err.status === 400) {
