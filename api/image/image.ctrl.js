@@ -2,6 +2,8 @@ const models = require('../../models');
 const colorConsole = require('../../lib/console');
 const imageInfo = require('../../config/imageInfo');
 const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
@@ -72,8 +74,12 @@ exports.uploadThumbnail = async (req, res) => {
 exports.getProfileUrl = async(req, user_id) => {
 	try {
 		const user = await models.User.getUser(user_id);
-		const { profile_pic } = user;
-	
+		let { profile_pic } = user;
+		
+		if (!fs.existsSync(path.join(__dirname, `../../public/image/${profile_pic}`))) {
+			profile_pic = null;
+		};
+		
 		let profileUrl;
 		if (!profile_pic) {
 			profileUrl = `${req.origin}/static/image/${imageInfo.basic_profile}`;
@@ -90,6 +96,10 @@ exports.getProfileUrl = async(req, user_id) => {
 exports.getThumbnailUrl = async (req, channel_id) => {
 	try {
 		let { thumbnail } = await models.Channel.getChannel(channel_id);
+		
+		if (!fs.existsSync(path.join(__dirname, `../../public/image/${thumbnail}`))) {
+			thumbnail = null;
+		};
 		
 		let thumbnailUrl;
 		if (!thumbnail) {
