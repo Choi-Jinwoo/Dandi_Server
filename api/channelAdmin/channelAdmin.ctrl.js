@@ -49,6 +49,9 @@ exports.awaitUser = async (req, res) => {
 			return res.status(204).json({ status: 204, message: '승인대기 유저가 존재하지 않습니다.' });
 		}
 
+		for (let i = 0; i < awaitUsers.length; i++) {
+			awaitUsers[i] = await models.User.getUserData(awaitUsers[i].user_id);
+		}
 		colorConsole.gray('<response>');
 		colorConsole.gray({ awaitUsers });
 
@@ -120,7 +123,7 @@ exports.updateChannel = async (req, res) => {
 	const { user, body } = req;
 	const { channel_id } = req.query; //querystirng (channel_id : update channel id)
 
-	colorConsole.gray('request');
+	colorConsole.gray('<request>');
 	colorConsole.gray({ channel_id, body });
 
 	try {
@@ -150,5 +153,36 @@ exports.updateChannel = async (req, res) => {
 	} catch (err) {
 		colorConsole.red(err.message);
 		return res.status(500).json({ status: 500, message: '채널 변경에 실패하였습니다.' });
+	}
+}
+
+exports.forcedExit = async (req, res) => {
+	colorConsole.green('[channelAdmin] 유저 강제퇴장');
+	const { user } = req;
+	const { channel_id, user_id } = req.query;
+
+	if (!(channel_id && user_id)) {
+		colorConsole.yellow('검증 오류입니다.');
+		return res.status(400).json({ status: 400, message: '검증 오류입니다' });
+	}
+	if (user_id === user.user_id) {
+		colorConsole.yellow('[channelAdmin]]강제퇴장이 불가능한 유저입니다.');
+		return res.status(403).json({ status: 403, message: '강제퇴장이 불가능한 유저입니다.' });
+	}
+	colorConsole.gray('<reqeust>');
+	colorConsole.gray({ channel_id, user_id });
+
+	try {
+		if (!await models.Channel.isFounder(user.user_id, channel_id)) {
+			colorConsole.yellow('[channelAdmin] 거절 권한이 없습니다.');
+			return res.status(403).json({ status: 403, message: '거절 권한이 없습니다.' });
+		}
+
+		await models.ChannelUser.deleteChannelUser(user_id, channel_id);
+
+		return res.status(200).json({ status: 200, message: '채널 강제퇴장에 완료되었습니다.' });
+	} catch (err) {
+		colorConsole.red(err.message);
+		return res.status(500).json({ status: 500, message: '채널 강제퇴장에 실패하였습니다.' });
 	}
 }

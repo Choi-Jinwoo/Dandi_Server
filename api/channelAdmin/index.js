@@ -7,5 +7,6 @@ router.get('/await', tokenMiddleware, channelAdminCtrl.awaitUser);
 router.get('/allow', tokenMiddleware, channelAdminCtrl.allowUser);
 router.delete('/reject', tokenMiddleware, channelAdminCtrl.rejectUser);
 router.put('/update', tokenMiddleware, channelAdminCtrl.updateChannel);
+router.delete('/forced-exit', tokenMiddleware, channelAdminCtrl.forcedExit);
 
 module.exports = router;

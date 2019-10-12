@@ -70,13 +70,12 @@ exports.login = async (req, res) => {
 	}
 
 	try {
-		const userExist = await models.User.getUser(user_id);
+		const userData = await models.User.getUserForLogin(user_id, user_pw);
 
-		if (!userExist) {
+		if (!userData) {
 			colorConsole.yellow('[auth] 유저 정보가 존재하지 않습니다.');
 			return res.status(401).json({ status: 401, message: '유저 정보가 존재하지 않습니다.' });
 		}
-		const userData = await models.User.getUserForLogin(user_id, user_pw);
 
 		if (!userData.isAllowed) {
 			colorConsole.yellow('[auth] 승인되지 않은 유저입니다.');

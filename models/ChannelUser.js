@@ -100,6 +100,13 @@ module.exports = (sequelize, DataTypes) => {
 		where: {
 			user_id,
 			channel_id,
+			isAllowed: false,
+		},
+	});
+	ChannelUser.deleteChannelUser = (user_id, channel_id) => ChannelUser.destroy({
+		where: {
+			user_id,
+			channel_id,
 		},
 	});
 	ChannelUser.deleteChannelUserByChannel = (channel_id) => ChannelUser.destroy({
