@@ -19,7 +19,7 @@ exports.getChannelEvent = async (req, res) => {
       );
 
       for (let i = 0; i < joinedChannel.length; i++) {
-        events[i] = await models.ChannelEvent.geEventByChannel(joinedChannel[i].channel_id);
+        events[i] = await models.ChannelEvent.getEventByChannel(joinedChannel[i].channel_id);
       }
     } else {
       if (!(await models.ChannelUser.isMember(user.user_id, channel_id))) {
