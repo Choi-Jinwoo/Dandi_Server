@@ -62,9 +62,6 @@ exports.awaitUser = async (req, res) => {
 			searchById(awaitUsers[i].school)
 				.then(async (schoolInfo) => {
 					awaitUsers[i].school = schoolInfo;
-					colorConsole.gray('<response>');
-					colorConsole.gray({ awaitUsers });
-					return res.status(200).json({ status: 200, message: '승인대기 유저 조회에 성공하였습니다.', data: { awaitUsers } });
 				})
 				.catch(async (err) => {
 					if (err.status === 404) {
@@ -75,6 +72,9 @@ exports.awaitUser = async (req, res) => {
 						return res.status(500).json({ status: 500, message: '승인대기 유저 조회에 실패하였습니다.' });
 					}
 				});
+			colorConsole.gray('<response>');
+			colorConsole.gray({ awaitUsers });
+			return res.status(200).json({ status: 200, message: '승인대기 유저 조회에 성공하였습니다.', data: { awaitUsers } });
 		}
 	} catch (err) {
 		colorConsole.red(err.message);

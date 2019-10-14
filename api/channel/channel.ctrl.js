@@ -23,13 +23,14 @@ exports.addChannel = async (req, res) => {
 
 	try {
 		const channelExist = await models.Channel.getChannelForCreate(body.school_id, body.name);
+		let createdChannel;
 
 		if (channelExist) {
 			colorConsole.yellow('[channel] 이미 채널이 존재합니다.');
 			return res.status(409).json({ status: 409, message: '이미 채널이 존재합니다.' });
 		}
 
-		const createdChannel = await models.Channel.createChannel(body);
+		createdChannel = await models.Channel.createChannel(body);
 	} catch (err) {
 		colorConsole.red(err.message);
 		return res.status(500).json({ status: 500, message: '채널 개설에 실패하였습니다.' });
