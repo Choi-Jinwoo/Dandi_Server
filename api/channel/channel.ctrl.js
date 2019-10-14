@@ -13,6 +13,7 @@ exports.addChannel = async (req, res) => {
 
 	colorConsole.gray('<request>');
 	colorConsole.gray({ body });
+	let createdChannel;
 
 	try {
 		await Validation.validateAddChannel(body);
@@ -23,7 +24,6 @@ exports.addChannel = async (req, res) => {
 
 	try {
 		const channelExist = await models.Channel.getChannelForCreate(body.school_id, body.name);
-		let createdChannel;
 
 		if (channelExist) {
 			colorConsole.yellow('[channel] 이미 채널이 존재합니다.');
