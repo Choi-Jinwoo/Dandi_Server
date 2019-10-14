@@ -1,6 +1,9 @@
 const models = require('../../models');
 const colorConsole = require('../../lib/console');
 const Validation = require('../../lib/validation');
+const { getProfileUrl } = require('../image/image.ctrl');
+const { searchById } = require('../school/school.ctrl');
+const { getThumbnailUrl } = require('../image/image.ctrl');
 
 exports.createChannel = async (req, res) => {
 	colorConsole.green('[channelAdmin] 개설 채널 조회');
@@ -11,6 +14,10 @@ exports.createChannel = async (req, res) => {
 		if (!createChannels.length) {
 			colorConsole.yellow('[channelAdmin] 개설 채널이 존재하지 않습니다.');
 			return res.status(204).json({ status: 204, message: '개설 채널이 존재하지 않습니다.' });
+		}
+
+		for (let i = 0; i < createChannels.length; i++) {
+			createChannels[i].thumbnail = await getThumbnailUrl(req, createChannels[i].id);
 		}
 
 		colorConsole.gray('<response>');
@@ -51,11 +58,24 @@ exports.awaitUser = async (req, res) => {
 
 		for (let i = 0; i < awaitUsers.length; i++) {
 			awaitUsers[i] = await models.User.getUserData(awaitUsers[i].user_id);
+			awaitUsers[i].profile_pic = await getProfileUrl(req, awaitUsers[i].user_id);
+			searchById(awaitUsers[i].school)
+				.then(async (schoolInfo) => {
+					awaitUsers[i].school = schoolInfo;
+					colorConsole.gray('<response>');
+					colorConsole.gray({ awaitUsers });
+					return res.status(200).json({ status: 200, message: '승인대기 유저 조회에 성공하였습니다.', data: { awaitUsers } });
+				})
+				.catch(async (err) => {
+					if (err.status === 404) {
+						colorConsole.yellow(err.message);
+						return res.status(404).json({ status: 404, message: err.message });
+					} else {
+						colorConsole.red(err.message);
+						return res.status(500).json({ status: 500, message: '승인대기 유저 조회에 실패하였습니다.' });
+					}
+				});
 		}
-		colorConsole.gray('<response>');
-		colorConsole.gray({ awaitUsers });
-
-		return res.status(200).json({ status: 200, message: '승인대기 유저 조회에 성공하였습니다.', data: { awaitUsers } });
 	} catch (err) {
 		colorConsole.red(err.message);
 		return res.status(500).json({ status: 500, message: '승인대기 유저 조회에 실패하였습니다.' });
