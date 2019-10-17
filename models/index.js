@@ -27,13 +27,11 @@ fs.readdirSync(__dirname)
 
 Object.keys(models).forEach((modelName) => {
 	if ('associate' in models[modelName]) {
-		console.log(models[modelName]);
-		console.log(models);
 		models[modelName].associate(models);
 	}
 });
 
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync().then(() => {
 	colorConsole.green('Databases sync');
 }).catch((err) => {
 	colorConsole.red(err.message);
