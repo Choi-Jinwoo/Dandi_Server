@@ -70,18 +70,18 @@ module.exports = (sequelize, DataTypes) => {
 		},
 	});
 
-	User.associate = (models) => {
-		models.User.hasMany(models.ChannelEvent, {
-			foreignKey: 'channel_id',
-			onDelete: 'cascade',
-		});
-	}
-	User.associate = (models) => {
-		models.User.hasMany(models.Channel, {
-			foreignKey: 'create_user',
-			onDelete: 'cascade',
-		});
-	}
+	// User.associate = (models) => {
+	// 	models.User.hasMany(models.ChannelEvent, {
+	// 		foreignKey: 'author',
+	// 		onDelete: 'cascade',
+	// 	});
+	// }
+	// User.associate = (models) => {
+	// 	models.User.hasMany(models.Channel, {
+	// 		foreignKey: 'create_user',
+	// 		onDelete: 'cascade',
+	// 	});
+	// }
 
 	User.getUser = (user_id) => User.findOne({
 		attributes: [

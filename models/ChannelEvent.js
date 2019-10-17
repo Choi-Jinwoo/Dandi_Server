@@ -43,14 +43,16 @@ module.exports = (sequelize, DataTypes) => {
 
 	ChannelEvent.associate = (models) => {
 		models.ChannelEvent.belongsTo(models.Channel, {
-			foreignKey: 'channel_id'
+			foreignKey: 'channel_id',
+			onDelete: 'cascade'
 		});
 	}
-	ChannelEvent.associate = (models) => {
-		models.ChannelEvent.belongsTo(models.User, {
-			foreignKey: 'author'
-		});
-	}
+	// ChannelEvent.associate = (models) => {
+	// 	models.ChannelEvent.belongsTo(models.User, {
+	// 		foreignKey: 'author',
+	// 		onDelete: 'cascade'
+	// 	});
+	// }
 
 	ChannelEvent.getEvent = (id) => ChannelEvent.findOne({
 		where: {

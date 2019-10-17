@@ -59,7 +59,7 @@ exports.awaitUser = async (req, res) => {
 		for (let i = 0; i < awaitUsers.length; i++) {
 			awaitUsers[i] = await models.User.getUserData(awaitUsers[i].user_id);
 			awaitUsers[i].profile_pic = await getProfileUrl(req, awaitUsers[i].user_id);
-			searchById(awaitUsers[i].school)
+			await searchById(awaitUsers[i].school)
 				.then(async (schoolInfo) => {
 					awaitUsers[i].school = schoolInfo;
 				})
@@ -74,8 +74,8 @@ exports.awaitUser = async (req, res) => {
 				});
 			colorConsole.gray('<response>');
 			colorConsole.gray({ awaitUsers });
-			return res.status(200).json({ status: 200, message: '승인대기 유저 조회에 성공하였습니다.', data: { awaitUsers } });
 		}
+		return res.status(200).json({ status: 200, message: '승인대기 유저 조회에 성공하였습니다.', data: { awaitUsers } });
 	} catch (err) {
 		colorConsole.red(err.message);
 		return res.status(500).json({ status: 500, message: '승인대기 유저 조회에 실패하였습니다.' });
@@ -111,7 +111,7 @@ exports.allowUser = async (req, res) => {
 }
 
 exports.rejectUser = async (req, res) => {
-	colorConsole('[channelAdmin] 승인대기 유저 거절');
+	colorConsole.green('[channelAdmin] 승인대기 유저 거절');
 	const { user } = req;
 	const { channel_id, user_id } = req.query; //querystring (channel_id : request channel, user_id : reject user id)
 

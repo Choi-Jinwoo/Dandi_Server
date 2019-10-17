@@ -31,14 +31,16 @@ module.exports = (sequelize, DataTypes) => {
 
 	ChannelUser.associate = (models) => {
 		models.ChannelUser.belongsTo(models.Channel, {
-			foreignKey: 'channel_id'
+			foreignKey: 'channel_id',
+			onDelete: 'cascade',
 		});
 	}
-	ChannelUser.associate = (models) => {
-		models.ChannelUser.belongsTo(models.User, {
-			foreignKey: 'user_id'
-		});
-	}
+	// ChannelUser.associate = (models) => {
+	// 	models.ChannelUser.belongsTo(models.User, {
+	// 		foreignKey: 'user_id',
+	// 		onDelete: 'cascade',
+	// 	});
+	// }
 
 	ChannelUser.getChannelUserByUser = (user_id) => ChannelUser.findAll({
 		where: {
