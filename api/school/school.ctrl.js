@@ -227,10 +227,7 @@ exports.schoolEvent = async (req, res) => {
     }
   });
 
-  return res.status(500).json({
-    status: 500,
-    message: '학사일정 조회에 실패하였습니다.',
-  });
+  return true;
 };
 
 exports.classInfo = async (req, res) => {
