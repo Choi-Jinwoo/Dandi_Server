@@ -82,14 +82,25 @@ exports.awaitUser = async (req, res) => {
       // eslint-disable-next-line no-await-in-loop
       awaitUsers[i].profile_pic = await getProfileUrl(req, awaitUsers[i].user_id);
       // eslint-disable-next-line no-await-in-loop
-      searchById(awaitUsers[i].school)
+      await searchById(awaitUsers[i].school)
         .then(async (schoolInfo) => {
           awaitUsers[i].school = schoolInfo;
+          colorConsole.gray('<response>');
+          colorConsole.gray({ awaitUsers });
+
+          return res.status(200).json({
+            status: 200,
+            message: '승인대기 유저 조회에 성공하였습니다.',
+            data: { awaitUsers },
+          });
         })
         .catch(async (err) => {
           if (err.status === 404) {
             colorConsole.yellow(err.message);
-            return res.status(404).json({ status: 404, message: err.message });
+            return res.status(404).json({
+              status: 404,
+              message: err.message,
+            });
           }
           colorConsole.red(err.message);
           return res.status(500).json({
@@ -98,15 +109,6 @@ exports.awaitUser = async (req, res) => {
           });
         });
     }
-
-    colorConsole.gray('<response>');
-    colorConsole.gray({ awaitUsers });
-
-    return res.status(200).json({
-      status: 200,
-      message: '승인대기 유저 조회에 성공하였습니다.',
-      data: { awaitUsers },
-    });
   } catch (err) {
     colorConsole.red(err.message);
     return res.status(500).json({
