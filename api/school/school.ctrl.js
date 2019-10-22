@@ -89,10 +89,11 @@ exports.searchById = async (schoolId) => {
 
       if (_schoolInfo.RESULT !== undefined) {
         if (_schoolInfo.RESULT.CODE === 'INFO-200') { // no school info
-          return reject(new Error({
+          // eslint-disable-next-line prefer-promise-reject-errors
+          return reject({
             status: 404,
             message: '학교 정보가 존재하지 않습니다.',
-          }));
+          });
         }
       }
 
@@ -145,10 +146,7 @@ exports.schoolInfo = async (req, res) => {
     }
   }
 
-  return res.status(500).json({
-    status: 500,
-    message: '학교 정보조회에 실패하였습니다.',
-  });
+  return true;
 };
 
 exports.schoolEvent = async (req, res) => {
