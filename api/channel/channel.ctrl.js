@@ -133,7 +133,7 @@ exports.joinChannel = async (req, res) => {
   }
 
   try {
-    const channelUser = await models.ChannelUser.isMember(user.user_id, channelId);
+    const channelUser = await models.ChannelUser.getUserStatus(user.user_id, channelId);
 
     if (channelUser) {
       colorConsole.yellow('[channel] 이미 가입된 채널입니다.');
