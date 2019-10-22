@@ -75,13 +75,6 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
-  ChannelEvent.Channel = (id) => ChannelEvent.findOne({
-    where: {
-      id,
-    },
-    raw: true,
-  });
-
   ChannelEvent.createEvent = (data) => ChannelEvent.create({
     channel_id: data.channel_id,
     title: data.title,

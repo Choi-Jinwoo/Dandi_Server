@@ -25,7 +25,7 @@ exports.getChannelEvent = async (req, res) => {
         );
       }
     } else {
-      if (!(await models.ChannelUser.isMember(user.user_id, channelId))) {
+      if (!(await models.ChannelUser.getIsMember(user.user_id, channelId))) {
         colorConsole.yellow('[channelEvent] 일정 조회 권한이 없습니다.');
         return res.status(403).json({
           status: 403,
@@ -94,7 +94,7 @@ exports.addEvent = async (req, res) => {
   }
 
   try {
-    if (!(await models.ChannelUser.isMember(user.user_id, channelId))) {
+    if (!(await models.ChannelUser.getIsMember(user.user_id, channelId))) {
       colorConsole.yellow('[channelEvent] 일정 추가 권한이 없습니다.');
       return res.status(403).json({
         status: 403,
@@ -135,7 +135,7 @@ exports.deleteEvent = async (req, res) => {
   try {
     const { channel_id: channelId } = await models.ChannelEvent.getEvent(eventId);
 
-    if (!(await models.ChannelUser.isMember(user.user_id, channelId))) {
+    if (!(await models.ChannelUser.getIsMember(user.user_id, channelId))) {
       colorConsole.yellow('[channelEvent] 일정 삭제 권한이 없습니다.');
       return res.status(403).json({
         status: 403,
@@ -190,7 +190,7 @@ exports.updateEvent = async (req, res) => {
   try {
     const { channel_id: channelId } = await models.ChannelEvent.getEvent(eventId);
 
-    if (!(await models.ChannelUser.isMember(user.user_id, channelId))) {
+    if (!(await models.ChannelUser.getIsMember(user.user_id, channelId))) {
       colorConsole.yellow('[channelEvent] 일정 변경 권한이 없습니다.');
       return res.status(403).json({
         status: 403,
@@ -232,7 +232,7 @@ exports.searchEvent = async (req, res) => {
   }
 
   try {
-    if (!(await models.ChannelUser.isMember(user.user_id, channelId))) {
+    if (!(await models.ChannelUser.getIsMember(user.user_id, channelId))) {
       colorConsole.yellow('[channelEvent] 일정 검색 권한이 없습니다.');
       return res.status(403).json({
         status: 403,

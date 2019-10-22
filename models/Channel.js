@@ -106,7 +106,7 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
-  Channel.isFounder = (createUser, id) => Channel.findOne({
+  Channel.getIsFounder = (createUser, id) => Channel.findOne({
     where: {
       id,
       create_user: createUser,

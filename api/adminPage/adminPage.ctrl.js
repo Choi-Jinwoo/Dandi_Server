@@ -43,7 +43,7 @@ exports.getUserData = async (req, res) => {
   }
 };
 
-exports.awaitUser = async (req, res) => {
+exports.getAwaitUser = async (req, res) => {
   colorConsole.green('[adminPage] 승인대기 유저 조회');
   const { user } = req;
 
@@ -56,7 +56,7 @@ exports.awaitUser = async (req, res) => {
   }
 
   try {
-    const awaitUsers = await models.User.awaitUser();
+    const awaitUsers = await models.User.getAwaitUser();
 
     if (!awaitUsers.length) {
       colorConsole.yellow('[adminPage] 승인대기 유저가 존재하지 않습니다');
@@ -123,7 +123,7 @@ exports.allowUser = async (req, res) => {
 
   try {
     await models.User.allowUser(allowId);
-    await email.sendEmail(allowUser.user_email, '[단디] 회원가입이 승인되었습니다.', email.allowForm());
+    await email.sendEmail(allowUser.user_email, '[단디] 회원가입이 승인되었습니다.', email.getAllowForm());
     return res.status(200).json({
       status: 200,
       message: '회원가입 승인에 성공하였습니다.',
@@ -179,7 +179,7 @@ exports.rejectUser = async (req, res) => {
 
   try {
     await models.User.rejectUser(rejectId);
-    await email.sendEmail(rejectUser.user_email, '[단디] 회원가입이 거절되었습니다.', email.rejectForm());
+    await email.sendEmail(rejectUser.user_email, '[단디] 회원가입이 거절되었습니다.', email.getRejectForm());
     return res.status(200).json({
       status: 200,
       message: '회원가입 거절이 완료되었습니다.',

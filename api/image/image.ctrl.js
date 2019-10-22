@@ -51,7 +51,7 @@ exports.uploadThumbnail = async (req, res) => {
   }
 
   try {
-    if (!await models.Channel.isFounder(user.user_id, channelId)) {
+    if (!await models.Channel.getIsFounder(user.user_id, channelId)) {
       colorConsole.yellow('[image] 채널 이비지 업로드 권한이 없습니다.');
       return res.status(403).json({
         status: 403,

@@ -41,7 +41,7 @@ exports.createChannel = async (req, res) => {
   }
 };
 
-exports.awaitUser = async (req, res) => {
+exports.getAwaitUser = async (req, res) => {
   colorConsole.green('[channelAdmin] 승인대기 유저 조회');
   const { user } = req;
   const { channel_id: channelId } = req.query; // querystring (channel_id : request channel id)
@@ -60,7 +60,7 @@ exports.awaitUser = async (req, res) => {
   }
 
   try {
-    if (!await models.Channel.isFounder(user.user_id, channelId)) {
+    if (!await models.Channel.getIsFounder(user.user_id, channelId)) {
       colorConsole.yellow('[channelAdmin] 조회 권한이 없습니다.');
       return res.status(403).json({
         status: 403,
@@ -68,7 +68,7 @@ exports.awaitUser = async (req, res) => {
       });
     }
 
-    awaitUsers = await models.ChannelUser.awaitUser(channelId);
+    awaitUsers = await models.ChannelUser.getAwaitUser(channelId);
   } catch (err) {
     colorConsole.red(err.message);
     return res.status(500).json({
@@ -84,7 +84,7 @@ exports.awaitUser = async (req, res) => {
     });
   }
 
-  let isResponsed = false; //for문 안 콜백속에서 오류가 발생하여 응답하였는지 확인
+  let isResponsed = false; // for문 안 콜백속에서 오류가 발생하여 응답하였는지 확인
   for (let i = 0; i < awaitUsers.length; i += 1) {
     // eslint-disable-next-line no-await-in-loop
     awaitUsers[i] = await models.User.getUserData(awaitUsers[i].user_id);
@@ -97,6 +97,7 @@ exports.awaitUser = async (req, res) => {
         colorConsole.gray('<response>');
         colorConsole.gray({ awaitUsers });
       })
+      // eslint-disable-next-line no-loop-func
       .catch(async (err) => {
         if (err.status === 404) {
           colorConsole.yellow(err.message);
@@ -113,15 +114,15 @@ exports.awaitUser = async (req, res) => {
           message: '승인대기 유저 조회에 실패하였습니다.',
         });
       });
-    }
-    if (isResponsed) {
-      return;
-    }
-    return res.status(200).json({
-      status: 200,
-      message: '승인대기 유저 조회에 성공하였습니다.',
-      data: { awaitUsers },
-    });
+  }
+  if (isResponsed) {
+    return true;
+  }
+  return res.status(200).json({
+    status: 200,
+    message: '승인대기 유저 조회에 성공하였습니다.',
+    data: { awaitUsers },
+  });
 };
 
 exports.allowUser = async (req, res) => {
@@ -144,7 +145,7 @@ exports.allowUser = async (req, res) => {
   }
 
   try {
-    if (!await models.Channel.isFounder(user.user_id, channelId)) {
+    if (!await models.Channel.getIsFounder(user.user_id, channelId)) {
       colorConsole.yellow('[channelAdmin] 승인 권한이 없습니다.');
       return res.status(403).json({
         status: 403,
@@ -187,7 +188,7 @@ exports.rejectUser = async (req, res) => {
   }
 
   try {
-    if (!await models.Channel.isFounder(user.user_id, channelId)) {
+    if (!await models.Channel.getIsFounder(user.user_id, channelId)) {
       colorConsole.yellow('[channelAdmin] 거절 권한이 없습니다.');
       return res.status(403).json({
         status: 403,
@@ -264,7 +265,7 @@ exports.updateChannel = async (req, res) => {
   }
 };
 
-exports.forcedExit = async (req, res) => {
+exports.forceExit = async (req, res) => {
   colorConsole.green('[channelAdmin] 유저 강제퇴장');
   const { user } = req;
   const {
@@ -290,7 +291,7 @@ exports.forcedExit = async (req, res) => {
   colorConsole.gray({ channel_id: channelId, user_id: userId });
 
   try {
-    if (!await models.Channel.isFounder(user.user_id, channelId)) {
+    if (!await models.Channel.getIsFounder(user.user_id, channelId)) {
       colorConsole.yellow('[channelAdmin] 거절 권한이 없습니다.');
       return res.status(403).json({
         status: 403,

@@ -5,7 +5,7 @@ const randomCode = require('../../lib/randomCode');
 const email = require('../../lib/email');
 const colorConsole = require('../../lib/console');
 
-exports.isOverlapped = async (req, res) => {
+exports.getIsOverlapped = async (req, res) => {
   colorConsole.green('[auth] 중복 확인');
   const { user_id: userId } = req.body;
 
@@ -60,7 +60,7 @@ exports.sendEmailAuth = async (req, res) => {
   }
 
   try {
-    await email.sendEmail(userEmail, '[단디] 인증번호', email.authForm(authCode));
+    await email.sendEmail(userEmail, '[단디] 인증번호', email.getAuthForm(authCode));
     return res.status(200).json({
       status: 200,
       message: '인증번호 발송에 성공하였습니다.',

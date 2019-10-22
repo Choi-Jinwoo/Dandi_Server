@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
-  ChannelUser.isMember = (userId, channelId) => ChannelUser.findOne({
+  ChannelUser.getIsMember = (userId, channelId) => ChannelUser.findOne({
     where: {
       user_id: userId,
       channel_id: channelId,
@@ -81,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
-  ChannelUser.awaitUser = (channelId) => ChannelUser.findAll({
+  ChannelUser.getAwaitUser = (channelId) => ChannelUser.findAll({
     where: {
       channel_id: channelId,
       isAllowed: false,

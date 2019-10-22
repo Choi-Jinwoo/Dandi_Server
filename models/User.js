@@ -151,7 +151,7 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
-  User.awaitUser = () => User.findAll({
+  User.getAwaitUser = () => User.findAll({
     attributes: [
       'user_id',
       'user_name',

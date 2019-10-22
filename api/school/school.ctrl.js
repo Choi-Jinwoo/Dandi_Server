@@ -112,7 +112,7 @@ exports.searchById = async (schoolId) => {
   });
 };
 
-exports.schoolInfo = async (req, res) => {
+exports.getSchoolInfo = async (req, res) => {
   colorConsole.green('[school] 학교 정보 조회');
   const { school_name: schoolName } = req.query;
 
@@ -149,7 +149,7 @@ exports.schoolInfo = async (req, res) => {
   return true;
 };
 
-exports.schoolEvent = async (req, res) => {
+exports.getSchoolEvent = async (req, res) => {
   colorConsole.green('[school] 학사일정 조회');
   const { user } = req;
   const { year } = req.query;
@@ -230,7 +230,7 @@ exports.schoolEvent = async (req, res) => {
   return true;
 };
 
-exports.classInfo = async (req, res) => {
+exports.getClassInfo = async (req, res) => {
   colorConsole.green('[school] 반 정보 조회');
   const {
     school_id: schoolId,
