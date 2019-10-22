@@ -1,10 +1,9 @@
-const tokenMiddleware = require('../../middleware/auth'); //middleware
-const authCtrl = require('./auth.ctrl');
 const router = require('express').Router();
+const authCtrl = require('./auth.ctrl');
 
-router.post('/login',  authCtrl.login);
+router.post('/login', authCtrl.login);
 router.post('/sign-up', authCtrl.signUp);
 router.post('/sign-up/is-overlapped', authCtrl.isOverlapped);
-router.post('/sign-up/email', authCtrl.emailAuth);
+router.post('/sign-up/email', authCtrl.sendEmailAuth);
 
 module.exports = router;

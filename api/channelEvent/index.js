@@ -1,6 +1,6 @@
-const tokenMiddleware = require('../../middleware/auth'); //middleware
-const channelEvent = require('./channelEvent.ctrl');
 const router = require('express').Router();
+const tokenMiddleware = require('../../middleware/auth');
+const channelEvent = require('./channelEvent.ctrl');
 
 router.get('/', tokenMiddleware, channelEvent.getChannelEvent);
 router.post('/add', tokenMiddleware, channelEvent.addEvent);

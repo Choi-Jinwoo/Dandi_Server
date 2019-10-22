@@ -1,15 +1,15 @@
-const tokenMiddleware = require('../../middleware/auth'); //middleware
-const imageCtrl = require('./image.ctrl');
 const router = require('express').Router();
 const multer = require('multer');
+const tokenMiddleware = require('../../middleware/auth'); // middleware
+const imageCtrl = require('./image.ctrl');
 
 const storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, './public/image/');
-	},
-	filename: (req, file, cb) => {
-		cb(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
-	},
+  destination: (req, file, cb) => {
+    cb(null, './public/image/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
+  },
 });
 
 const upload = multer({ storage });

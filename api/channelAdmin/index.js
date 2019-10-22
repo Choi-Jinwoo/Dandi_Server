@@ -1,6 +1,6 @@
-const tokenMiddleware = require('../../middleware/auth'); //middleware
-const channelAdminCtrl = require('./channelAdmin.ctrl');
 const router = require('express').Router();
+const tokenMiddleware = require('../../middleware/auth'); // middleware
+const channelAdminCtrl = require('./channelAdmin.ctrl');
 
 router.get('/', tokenMiddleware, channelAdminCtrl.createChannel);
 router.get('/await', tokenMiddleware, channelAdminCtrl.awaitUser);
