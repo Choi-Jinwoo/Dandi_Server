@@ -47,7 +47,7 @@ exports.sendEmailAuth = async (req, res) => {
   colorConsole.green('[auth] 인증번호 발송');
   const { user_email: userEmail } = req.body;
   const authCode = randomCode(6);
-
+  
   colorConsole.gray('<request>');
   colorConsole.gray({ user_email: userEmail });
 
