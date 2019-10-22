@@ -116,6 +116,7 @@ exports.awaitUser = async (req, res) => {
       message: '승인대기 유저 조회에 실패하였습니다.',
     });
   }
+  return true;
 };
 
 exports.allowUser = async (req, res) => {
