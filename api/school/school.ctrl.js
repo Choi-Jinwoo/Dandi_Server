@@ -2,13 +2,15 @@ require('dotenv').config();
 
 const request = require('request-promise');
 const colorConsole = require('../../lib/console');
-
-const { NEIS_KEY } = process.env;
+const neisUrl = require('../../lib/neis');
 
 exports.searchByName = async (req, res) => {
   colorConsole.green('[school] 학교 조회');
   const { school_name: schoolName } = req.query;
-  const url = `http://open.neis.go.kr/hub/schoolInfo?SCHUL_NM=${encodeURI(schoolName)}&Type=json&KEY=${NEIS_KEY}&pSize=800`;
+  const url = neisUrl({
+    subUrl: 'schoolInfo',
+    schoolName: encodeURI(schoolName),
+  });
   let schoolInfo;
 
   colorConsole.gray('<request>');
@@ -39,8 +41,10 @@ exports.searchByName = async (req, res) => {
           });
         }
       }
-
-      const listCount = _schoolInfo.schoolInfo[0].head[0].list_total_count;
+      let listCount = _schoolInfo.schoolInfo[0].head[0].list_total_count;
+      if (listCount > 1000) {
+        listCount = 1000;
+      }
       const schoolList = [];
 
       for (let i = 0; i < listCount; i += 1) {
@@ -68,14 +72,14 @@ exports.searchByName = async (req, res) => {
     }
   });
 
-  return res.status(500).json({
-    status: 500,
-    message: '학교 조회에 실패하였습니다.',
-  });
+  return true;
 };
 
 exports.searchById = async (schoolId) => {
-  const url = `http://open.neis.go.kr/hub/schoolInfo?SD_SCHUL_CODE=${encodeURI(schoolId)}&Type=json&KEY=${NEIS_KEY}`;
+  const url = neisUrl({
+    subUrl: 'schoolInfo',
+    schoolCode: encodeURI(schoolId),
+  });
   let schoolInfo;
 
   // eslint-disable-next-line no-async-promise-executor
@@ -170,8 +174,30 @@ exports.getSchoolEvent = async (req, res) => {
     month = `0${parseInt(month, 10)}`;
   }
 
-  const schoolInfo = await exports.searchById(user.school);
-  const url = `http://open.neis.go.kr/hub/SchoolSchedule?ATPT_OFCDC_SC_CODE=${schoolInfo.office_code}&SD_SCHUL_CODE=${user.school}&AA_YMD=${year}${month}&key=${NEIS_KEY}&type=json`;
+  let url;
+  try {
+    const schoolInfo = await exports.searchById(user.school);
+    url = neisUrl({
+      subUrl: 'SchoolSchedule',
+      officeCode: schoolInfo.office_code,
+      schoolCode: user.school,
+      yymm: `${year}${month}`,
+    });
+  } catch (err) {
+    if (err.status === 404) {
+      colorConsole.yellow(err.message);
+      return res.status(404).json({
+        status: 404,
+        message: err.message,
+      });
+    }
+    colorConsole.red(err.message);
+    return res.status(500).json({
+      status: 500,
+      message: '학사일정 조회에 실패하였습니다.',
+    });
+  }
+
 
   await request(url, (error, response, schoolEvent) => {
     try {
@@ -182,8 +208,6 @@ exports.getSchoolEvent = async (req, res) => {
           message: '학사일정 조회에 실패하였습니다.',
         });
       }
-
-
       schoolEvent = JSON.parse(schoolEvent);
 
       if (schoolEvent.RESULT !== undefined) {
@@ -197,7 +221,6 @@ exports.getSchoolEvent = async (req, res) => {
       }
 
       const eventCount = schoolEvent.SchoolSchedule[0].head[0].list_total_count;
-
       const events = [];
 
       for (let i = 0; i < eventCount; i += 1) {
@@ -248,9 +271,12 @@ exports.getClassInfo = async (req, res) => {
       message: '검증 오류입니다.',
     });
   }
-
-  const url = `http://open.neis.go.kr/hub/classInfo?SD_SCHUL_CODE=${schoolId}&ATPT_OFCDC_SC_CODE=${officeId}&GRADE=${grade}&Type=json&KEY=${NEIS_KEY}`;
-
+  const url = neisUrl({
+    subUrl: 'classInfo',
+    officeCode: officeId,
+    schoolCode: schoolId,
+    schoolGrade: grade,
+  });
   try {
     await request(url, (err, response, classInfo) => {
       if (err) {
@@ -291,8 +317,5 @@ exports.getClassInfo = async (req, res) => {
     });
   }
 
-  return res.status(500).json({
-    status: 500,
-    message: '학년 정보 조회에 실패히였습니다.',
-  });
+  return true;
 };
