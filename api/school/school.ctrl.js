@@ -161,8 +161,16 @@ exports.getSchoolEvent = async (req, res) => {
 
   colorConsole.gray('<request>');
   colorConsole.gray({ year, month });
+  let url;
 
-  if (!(year && month) || (!parseInt(month, 10))) {
+  if (!((year && month) || (!year && !month))) {
+    colorConsole.yellow('검증 오류입니다.');
+    return res.status(400).json({
+      status: 400,
+      message: '검증 오류입니다.',
+    });
+  }
+  if (!(month && parseInt(month, 10))) {
     colorConsole.yellow('검증 오류입니다.');
     return res.status(400).json({
       status: 400,
@@ -170,19 +178,9 @@ exports.getSchoolEvent = async (req, res) => {
     });
   }
 
-  if (parseInt(month, 10) < 10) {
-    month = `0${parseInt(month, 10)}`;
-  }
-
-  let url;
+  let schoolInfo;
   try {
-    const schoolInfo = await exports.searchById(user.school);
-    url = neisUrl({
-      subUrl: 'SchoolSchedule',
-      officeCode: schoolInfo.office_code,
-      schoolCode: user.school,
-      yymm: `${year}${month}`,
-    });
+    schoolInfo = await exports.searchById(user.school);
   } catch (err) {
     if (err.status === 404) {
       colorConsole.yellow(err.message);
@@ -198,6 +196,23 @@ exports.getSchoolEvent = async (req, res) => {
     });
   }
 
+  if (month) {
+    if (parseInt(month, 10) < 10) {
+      month = `0${parseInt(month, 10)}`;
+    }
+    url = neisUrl({
+      subUrl: 'SchoolSchedule',
+      officeCode: schoolInfo.office_code,
+      schoolCode: user.school,
+      yymm: `${year}${month}`,
+    });
+  } else {
+    url = neisUrl({
+      subUrl: 'SchoolSchedule',
+      officeCode: schoolInfo.office_code,
+      schoolCode: user.school,
+    });
+  }
 
   await request(url, (error, response, schoolEvent) => {
     try {
