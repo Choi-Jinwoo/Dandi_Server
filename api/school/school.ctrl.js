@@ -170,12 +170,14 @@ exports.getSchoolEvent = async (req, res) => {
       message: '검증 오류입니다.',
     });
   }
-  if (!(month && parseInt(month, 10))) {
-    colorConsole.yellow('검증 오류입니다.');
-    return res.status(400).json({
-      status: 400,
-      message: '검증 오류입니다.',
-    });
+  if (month) {
+    if (parseInt(month, 10)) {
+      colorConsole.yellow('검증 오류입니다.');
+      return res.status(400).json({
+        status: 400,
+        message: '검증 오류입니다.',
+      });
+    }
   }
 
   let schoolInfo;
