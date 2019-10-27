@@ -252,6 +252,8 @@ exports.searchChannel = async (req, res) => {
       }
       // eslint-disable-next-line no-await-in-loop
       channels[i].thumbnail = await getThumbnailUrl(req, channels[i].id);
+      // eslint-disable-next-line no-await-in-loop
+      channels[i].createUser = await models.User.getUserData(channels[i].create_user);
     }
 
     colorConsole.gray('<response>');
