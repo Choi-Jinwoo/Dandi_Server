@@ -28,11 +28,11 @@
 >```
 
 ## dotenv
-
-PORT=3000
-NEIS_KEY = 'neis key'
-JWT_SECRET = 'jwt secret'
-
+>```
+>PORT=3000
+>NEIS_KEY = 'neis key'
+>JWT_SECRET = 'jwt secret'
+>```
 ## file
 
 >```
