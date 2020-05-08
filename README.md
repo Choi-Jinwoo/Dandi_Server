@@ -2,8 +2,9 @@
 
 ## 개요
 - 초.중.고 학생의 일정 관리 서비스. 공유 캘린더
-- [소프트웨어기획서.pptx](https://github.com/Choi-Jinwoo/Dandi_Server/files/4174178/default.pptx)
-![image](https://user-images.githubusercontent.com/49791336/74085176-ac661d80-4ab9-11ea-85ec-a944ed12089a.png)
+- [소프트웨어기획서.pptx](https://github.com/Choi-Jinwoo/Dandi_Server/files/4174178/default.pptx)  
+ 
+- ![image](https://user-images.githubusercontent.com/49791336/74085176-ac661d80-4ab9-11ea-85ec-a944ed12089a.png)
 
 ## 기술 스택
 - Express.js
